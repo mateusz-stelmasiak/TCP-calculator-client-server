@@ -94,22 +94,22 @@ void Paczka::odczytaj(std::string wejscie)
 			op = bufor;
 			if (bufor == '+')
 			{
-				this->operacja = "DODAWANIE";
+				this->operacja = "Dodawanie";
 			}
 
 			if (bufor == '-')
 			{
-				this->operacja = "ODEJMOWANIE";
+				this->operacja = "Odejmowanie";
 			}
 
 			if (bufor == '*')
 			{
-				this->operacja = "MNOZENIE";
+				this->operacja = "Mnozenie";
 			}
 
 			if (bufor == ':')
 			{
-				this->operacja = "DZIELENIE";
+				this->operacja = "Dzielenie";
 			}
 		}
 		else
