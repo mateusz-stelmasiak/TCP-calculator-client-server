@@ -128,6 +128,12 @@ void Paczka::odczytaj(std::string wejscie)
 
 }
 
+unsigned int Paczka::dajIdentyfikator(){ return this->identyfikator;}
+
+std::string Paczka::dajZnacznikCzasu(){ return this->znacznikCzasu;}
+
+std::string Paczka::dajStatus(){ return this->status;}
+
 std::string Paczka::dajPaczke()
 {
 	std::string paczka = "";
@@ -176,3 +182,16 @@ void Paczka::parsujPaczke(std::string wejscie)
 		//this->argumenty
 	}
 }
+
+void Paczka::zerujPaczke()
+{
+	Paczka::operacja = "NULL";
+	Paczka::status = "NULL";
+	Paczka::identyfikator = 0;
+	Paczka::znacznikCzasu = "NULL";
+	argumenty.clear();
+}
+
+
+std::string Paczka::dajOperacje() { return this->operacja; }
+std::vector<unsigned int> Paczka::dajArgumenty() { return this->argumenty; }

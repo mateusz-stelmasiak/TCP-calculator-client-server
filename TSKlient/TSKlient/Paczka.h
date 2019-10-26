@@ -22,10 +22,18 @@ public:
 	void dodajStatus(std::string status);
 	void nadpiszArgumenty(unsigned int argument);
 
+	unsigned int dajIdentyfikator();
+	std::string dajZnacznikCzasu();
+	std::string dajStatus();
+	std::string dajPaczke();
+	std::string dajOperacje();
+	std::vector <unsigned int> dajArgumenty();
+
 	void odczytaj(std::string wejscie);
 	std::string dajPaczke();
 
 	void parsujPaczke(std::string wejscie);
+	void zerujPaczke();
 
 private:
 
