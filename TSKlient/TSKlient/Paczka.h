@@ -2,7 +2,12 @@
 #include <string>
 #include <vector>
 #include <ctime>   
+<<<<<<< HEAD
 #include <iostream>
+=======
+#include <map>
+#include <regex>
+>>>>>>> 7adb142ef82edb265985890d44a788dc6eaeea64
 
 class Paczka
 {
@@ -19,7 +24,7 @@ public:
 
 	void odczytaj(std::string wejscie);
 	std::string dajPaczke();
-
+	void parsujPaczke(std::string wejscie);
 
 private:
 

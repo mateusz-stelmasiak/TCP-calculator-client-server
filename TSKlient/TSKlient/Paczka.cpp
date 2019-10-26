@@ -110,8 +110,12 @@ void Paczka::odczytaj(std::string wejscie)
 		{
 			if (op != bufor)
 			{
+<<<<<<< HEAD
 				std::cout << "Bledzne dzialanie! " << std::endl;
 				//b³¹d!
+=======
+				//bÂ³Â¹d!
+>>>>>>> 7adb142ef82edb265985890d44a788dc6eaeea64
 			}
 		}
 	}
@@ -142,5 +146,30 @@ void Paczka::usunSpcaje(std::string *tekst)
 	while ((*tekst)[0] == ' ')
 	{
 		tekst->erase(0, 1);
+	}
+}
+
+void Paczka::parsujPaczke(std::string wejscie) 
+{
+	std::map<std::string, std::string> zParsowanyPakiet; //will hold the packet information extracted from the string
+
+   //using regex to split the data into kgroups of- (key)(: )(data)(;) and put the key-data pair into the map
+	std::smatch pary;
+	std::regex wzorzecKluczWartosc("(\\w+)(:\\s{1})(\\S*)(;)");
+
+
+	bool correctPacketFlag = 1;
+	while (wejscie.length() != 0 && correctPacketFlag) { //iterates over the packet string and finds data matching the (Key: data;) pattern
+		if (std::regex_search(wejscie, pary, wzorzecKluczWartosc))
+		{
+			zParsowanyPakiet.insert_or_assign(pary[1], pary[3]);
+			wejscie.erase(0, pary[0].length());
+		}
+		else { correctPacketFlag = 0; } // THROW EXCEPTION! if the regex doesn't match on any itteration, the packet is semantically incorect
+
+		this->identyfikator = (unsigned)std::stoi(zParsowanyPakiet.find("Identyfikator")->second);
+		this->operacja = zParsowanyPakiet.find("Operacja")->second;
+
+		//this->argumenty
 	}
 }
