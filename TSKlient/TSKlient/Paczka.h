@@ -18,7 +18,7 @@ public:
 
 	void odczytaj(std::string wejscie);
 	std::string dajPaczke();
-
+	void parsujPaczke(std::string wejscie);
 
 private:
 
