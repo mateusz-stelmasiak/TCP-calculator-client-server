@@ -5,8 +5,6 @@
 #include "Paczka.h"
 
 
- 
-
 #pragma comment(lib, "ws2_32.lib")
 
 int main()
@@ -15,7 +13,7 @@ int main()
 
 
 
-	std::string ipAdress = "127.0.0.1";
+	std::string ipAdress = "192.168.43.72";
 	int port = 54000;
 
 	WSAData data;
@@ -58,8 +56,10 @@ int main()
 		std::cout << "> ";
 		getline(std::cin, userInput);
 		paczka.odczytaj(userInput);
+		paczka.dodajZnacznikCzasu();
 		userInput = paczka.dajPaczke();
 
+		
 		sendResult = send(sock, userInput.c_str(), userInput.size() + 1, 0);
 		if (sendResult != SOCKET_ERROR)
 		{

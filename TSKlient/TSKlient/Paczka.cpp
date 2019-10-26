@@ -29,7 +29,7 @@ void Paczka::dodajZnacznikCzasu()
 	std::time_t t = std::time(0);
 	std::tm data;
 	localtime_s(&data, &t);
-	znacznikCzasu = std::to_string(data.tm_mday) + '.' + std::to_string(data.tm_mon + 1) + '.' + std::to_string(data.tm_year + 1900);
+	znacznikCzasu = std::to_string(data.tm_hour) + ":"  + std::to_string(data.tm_min) + ":" + std::to_string(data.tm_sec) + " " + std::to_string(data.tm_mday) + '.' + std::to_string(data.tm_mon + 1) + '.' + std::to_string(data.tm_year + 1900);
 }
 
 void Paczka::dodajZnacznikCzasu(std::string ZC)
@@ -47,6 +47,13 @@ void Paczka::dodajIdentyfikator(int identyfikator)
 	this->identyfikator = identyfikator;
 }
 
+void Paczka::nadpiszArgumenty(unsigned int argument)
+{
+	this->argumenty.clear();
+	this->argumenty.push_back(argument); 
+}
+
+
 void Paczka::odczytaj(std::string wejscie)
 {
 	this->argumenty.clear();
@@ -58,7 +65,6 @@ void Paczka::odczytaj(std::string wejscie)
 
 	while (wejscie.size() > 0)
 	{
-		std::cout << wejscie << std::endl;
 
 		this->usunSpcaje(&wejscie);
 		while (1)
@@ -110,12 +116,9 @@ void Paczka::odczytaj(std::string wejscie)
 		{
 			if (op != bufor)
 			{
-<<<<<<< HEAD
+
 				std::cout << "Bledzne dzialanie! " << std::endl;
-				//b³¹d!
-=======
-				//bÂ³Â¹d!
->>>>>>> 7adb142ef82edb265985890d44a788dc6eaeea64
+
 			}
 		}
 	}
@@ -136,7 +139,7 @@ std::string Paczka::dajPaczke()
 		paczka = paczka + "Liczba" + std::to_string(i+1) + ": "  + std::to_string(argumenty[i]) + ";";
 	}
 
-	paczka = paczka + "Koniec;";
+	paczka = paczka + "Koniec: TAK;";
 
 	return paczka;
 }

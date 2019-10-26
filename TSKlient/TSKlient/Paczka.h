@@ -2,12 +2,11 @@
 #include <string>
 #include <vector>
 #include <ctime>   
-<<<<<<< HEAD
 #include <iostream>
-=======
+
 #include <map>
 #include <regex>
->>>>>>> 7adb142ef82edb265985890d44a788dc6eaeea64
+
 
 class Paczka
 {
@@ -21,9 +20,11 @@ public:
 	void dodajZnacznikCzasu();
 	void dodajZnacznikCzasu(std::string ZC);
 	void dodajStatus(std::string status);
+	void nadpiszArgumenty(unsigned int argument);
 
 	void odczytaj(std::string wejscie);
 	std::string dajPaczke();
+
 	void parsujPaczke(std::string wejscie);
 
 private:
