@@ -155,5 +155,5 @@ void Paczka::parsujPaczke(std::string wejscie)
 		this->operacja = zParsowanyPakiet.find("Operacja")->second;
 
 		//this->argumenty
+	}
 }
-
