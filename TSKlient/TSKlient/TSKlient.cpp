@@ -11,11 +11,12 @@
 
 int main()
 {
-	
+	Paczka paczka = Paczka();
+
 
 
 	std::string ipAdress = "127.0.0.1";
-	int port = 5400;
+	int port = 54000;
 
 	WSAData data;
 	WORD ver = MAKEWORD(2, 2);
@@ -54,8 +55,10 @@ int main()
 	int bytesRecived;
 	do
 	{
-		std::cout << "> " << std::endl;
+		std::cout << "> ";
 		getline(std::cin, userInput);
+		paczka.odczytaj(userInput);
+		userInput = paczka.dajPaczke();
 
 		sendResult = send(sock, userInput.c_str(), userInput.size() + 1, 0);
 		if (sendResult != SOCKET_ERROR)

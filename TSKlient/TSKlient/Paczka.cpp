@@ -54,33 +54,35 @@ void Paczka::odczytaj(std::string wejscie)
 
 	char op;
 	char bufor;
-	unsigned int liczba = 0;
-	unsigned int cyfra;
+	unsigned int bliczba = 0;
 
 	while (wejscie.size() > 0)
 	{
+		std::cout << wejscie << std::endl;
+
 		this->usunSpcaje(&wejscie);
 		while (1)
 		{
+			this->usunSpcaje(&wejscie);
 			bufor = wejscie[0];
 			wejscie.erase(0, 1);
 
 			if (!(bufor >= 48 && bufor <= 57))
 			{
-				this->argumenty.push_back(liczba);
+				this->argumenty.push_back(bliczba);
+				bliczba = 0;
 				break;
 			}
 			
-			liczba = liczba*10 + std::stoi(&bufor, nullptr, 10);
+			bliczba = bliczba*10 + std::stoi(&bufor, nullptr, 10);
 		}
+		
 
-		this->usunSpcaje(&wejscie);
-		if (wejscie.size() == 0);
+		if (wejscie.size() == 0)
 		{
 			break;
 		}
-		bufor = wejscie[0];
-		wejscie.erase(0, 1);
+
 		if (this->operacja == "NULL")
 		{
 			op = bufor;
@@ -108,6 +110,7 @@ void Paczka::odczytaj(std::string wejscie)
 		{
 			if (op != bufor)
 			{
+				std::cout << "Bledzne dzialanie! " << std::endl;
 				//b³¹d!
 			}
 		}
@@ -121,6 +124,15 @@ void Paczka::odczytaj(std::string wejscie)
 std::string Paczka::dajPaczke()
 {
 	std::string paczka = "";
+	paczka = "Operacja: " + this->operacja + ";Status: " + this->status + ";Identyfikator: " + std::to_string(this->identyfikator) + ";ZnacznikCzasu: "
+		+ this->znacznikCzasu + ";";
+
+	for (int i = 0; i < this->argumenty.size(); i++)
+	{
+		paczka = paczka + "Liczba" + std::to_string(i+1) + ": "  + std::to_string(argumenty[i]) + ";";
+	}
+
+	paczka = paczka + "Koniec;";
 
 	return paczka;
 }
