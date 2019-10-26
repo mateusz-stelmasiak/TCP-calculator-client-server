@@ -23,7 +23,28 @@ Paczka::Paczka(std::string wejscie, std::string status, int identyfikator, std::
 	Paczka::odczytaj(wejscie);
 }
 
+void Paczka::dodajZnacznikCzasu()
+{
+	std::time_t t = std::time(0);
+	std::tm data;
+	localtime_s(&data, &t);
+	znacznikCzasu = std::to_string(data.tm_mday) + '.' + std::to_string(data.tm_mon + 1) + '.' + std::to_string(data.tm_year + 1900);
+}
 
+void Paczka::dodajZnacznikCzasu(std::string ZC)
+{
+	znacznikCzasu = ZC;
+}
+
+void Paczka::dodajStatus(std::string status)
+{
+	this->status = status;
+}
+
+void Paczka::dodajIdentyfikator(int identyfikator)
+{
+	this->identyfikator = identyfikator;
+}
 
 void Paczka::odczytaj(std::string wejscie)
 {

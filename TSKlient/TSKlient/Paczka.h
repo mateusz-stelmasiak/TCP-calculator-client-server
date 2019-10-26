@@ -1,6 +1,8 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <ctime>   
+
 class Paczka
 {
 public:
@@ -10,7 +12,8 @@ public:
 	Paczka(std::string wejscie, std::string status, int identyfikator, std::string znacznikCzasu);
 
 	void dodajIdentyfikator(int identyfikator);
-	void dodajZnacznikCzasu(int ZC);
+	void dodajZnacznikCzasu();
+	void dodajZnacznikCzasu(std::string ZC);
 	void dodajStatus(std::string status);
 
 	void odczytaj(std::string wejscie);

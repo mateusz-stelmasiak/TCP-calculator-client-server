@@ -3,12 +3,16 @@
 #include <string>
 #include <ws2tcpip.h>
 #include "Paczka.h"
-#include <ctime>
+
+
+ 
 
 #pragma comment(lib, "ws2_32.lib")
 
 int main()
 {
+	
+
 
 
 	std::string ipAdress = "127.0.0.1";
