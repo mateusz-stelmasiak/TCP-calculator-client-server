@@ -1,4 +1,6 @@
 ﻿  Paczka.cpp
+c:\users\maciej\documents\github\tsprojekt\tsklient\tsklient\paczka.cpp(78): warning C4390: ";": znaleziono kontrolowaną pustą instrukcję; czy to było zamierzone?
+c:\users\maciej\documents\github\tsprojekt\tsklient\tsklient\paczka.cpp(58): warning C4101: "cyfra": lokalna zmienna, do której nie istnieje odwołanie
   TSKlient.cpp
   Generowanie kodu...
   TSKlient.vcxproj -> C:\Users\Maciej\Documents\GitHub\tsProjekt\TSKlient\Debug\TSKlient.exe

@@ -7,6 +7,7 @@ Paczka::Paczka()
 	Paczka::status = "NULL";
 	Paczka::identyfikator = 0;
 	Paczka::znacznikCzasu = "NULL";
+	argumenty.clear();
 
 }
 
@@ -48,6 +49,71 @@ void Paczka::dodajIdentyfikator(int identyfikator)
 
 void Paczka::odczytaj(std::string wejscie)
 {
+	this->argumenty.clear();
+	this->operacja = "NULL";
+
+	char op;
+	char bufor;
+	unsigned int liczba = 0;
+	unsigned int cyfra;
+
+	while (wejscie.size() > 0)
+	{
+		this->usunSpcaje(&wejscie);
+		while (1)
+		{
+			bufor = wejscie[0];
+			wejscie.erase(0, 1);
+
+			if (!(bufor >= 48 && bufor <= 57))
+			{
+				this->argumenty.push_back(liczba);
+				break;
+			}
+			
+			liczba = liczba*10 + std::stoi(&bufor, nullptr, 10);
+		}
+
+		this->usunSpcaje(&wejscie);
+		if (wejscie.size() == 0);
+		{
+			break;
+		}
+		bufor = wejscie[0];
+		wejscie.erase(0, 1);
+		if (this->operacja == "NULL")
+		{
+			op = bufor;
+			if (bufor == '+')
+			{
+				this->operacja = "DODAWANIE";
+			}
+
+			if (bufor == '-')
+			{
+				this->operacja = "ODEJMOWANIE";
+			}
+
+			if (bufor == '*')
+			{
+				this->operacja = "MNOZENIE";
+			}
+
+			if (bufor == ':')
+			{
+				this->operacja = "DZIELENIE";
+			}
+		}
+		else
+		{
+			if (op != bufor)
+			{
+				//b³¹d!
+			}
+		}
+	}
+
+
 
 
 }
@@ -57,4 +123,12 @@ std::string Paczka::dajPaczke()
 	std::string paczka = "";
 
 	return paczka;
+}
+
+void Paczka::usunSpcaje(std::string *tekst)
+{
+	while ((*tekst)[0] == ' ')
+	{
+		tekst->erase(0, 1);
+	}
 }

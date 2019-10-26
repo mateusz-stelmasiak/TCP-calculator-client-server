@@ -19,10 +19,15 @@ public:
 	void odczytaj(std::string wejscie);
 	std::string dajPaczke();
 
+
 private:
+
 	std::string operacja;
 	std::string status;
 	unsigned int identyfikator;
 	std::string znacznikCzasu;
 	std::vector <unsigned int> argumenty;
+
+	void usunSpcaje(std::string *tekst);
+
 };
