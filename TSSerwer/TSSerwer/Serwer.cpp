@@ -294,8 +294,28 @@ std::string Serwer::generujZnacznikCzasu() {
 }
 
 
-std::string Serwer::generujInformacjeOSerwerze() {
-	std::string ip{""};
+std::string Serwer::generujInformacjeOSerwerze() 
+{
+	char szBuffer[1024];
+	unsigned char cip[4];
+	if (gethostname(szBuffer, sizeof(szBuffer)) == SOCKET_ERROR)
+	{
+		WSACleanup();
+		return false;
+	}
+	
+	struct hostent *host = gethostbyname(szBuffer);
+	if (host == NULL)
+	{
+		WSACleanup();
+		return false;
+	}
+	std::string ip;
+	cip[0] = ((struct in_addr *)(host->h_addr))->S_un.S_un_b.s_b1;
+	cip[1] = ((struct in_addr *)(host->h_addr))->S_un.S_un_b.s_b2;
+	cip[2] = ((struct in_addr *)(host->h_addr))->S_un.S_un_b.s_b3;
+	cip[3] = ((struct in_addr *)(host->h_addr))->S_un.S_un_b.s_b4;
+	ip = std::to_string((int)cip[0]) + "." + std::to_string((int)cip[1]) + "." + std::to_string((int)cip[2]) + "." + std::to_string((int)cip[3]);
 	return "IP serwera: " + ip + " Port nasluchujacy: " + PORT_NASLUCHUJACY;
 }
 std::string Serwer::generujInformacjeOKliencie(SOCKADDR_IN addr)

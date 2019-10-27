@@ -1,4 +1,6 @@
 ﻿  Paczka.cpp
-c:\users\user\documents\github\tsprojekt\tsklient\tsklient\paczka.cpp(138): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-c:\users\user\documents\github\tsprojekt\tsklient\tsklient\paczka.cpp(251): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-  TSKlient.vcxproj -> C:\Users\user\Documents\GitHub\tsProjekt\TSKlient\Debug\TSKlient.exe
+c:\users\maciej\documents\github\tsprojekt\tsklient\tsklient\paczka.cpp(138): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+c:\users\maciej\documents\github\tsprojekt\tsklient\tsklient\paczka.cpp(252): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+  TSKlient.cpp
+  Generowanie kodu...
+  TSKlient.vcxproj -> C:\Users\Maciej\Documents\GitHub\tsProjekt\TSKlient\Debug\TSKlient.exe

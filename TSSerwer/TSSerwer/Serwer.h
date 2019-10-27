@@ -1,9 +1,12 @@
 #pragma once
 #include "pch.h"
 #include <iostream>
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <WS2tcpip.h>
 #include <windows.h>
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <winsock2.h>
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>

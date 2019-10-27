@@ -30,6 +30,8 @@ public:
 	std::string dajOperacje();
 	std::vector <unsigned int> dajArgumenty();
 
+	
+
 	void odczytaj(std::string wejscie);
 
 	//! Paczka do wyswietlenia
