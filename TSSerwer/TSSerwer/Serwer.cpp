@@ -312,13 +312,13 @@ std::string Serwer::generujInformacjeOKliencie(SOCKADDR_IN addr)
 
 void Serwer::wypisz(std::string doWypisania) 
 {
-	std::cout << "\n<" << generujZnacznikCzasu() << "> " << doWypisania;
+	std::cout << "\n<" << generujZnacznikCzasu() << ">" << doWypisania;
 	std::cout << "\n";
 }
 
 void Serwer::wypisz(std::string naglowek, std::string cialo)
 {
-	std::cout << "\n<" << generujZnacznikCzasu() << "> " << naglowek;
+	std::cout << "\n<" << generujZnacznikCzasu() << ">" << naglowek;
 	std::cout << "\n  " << cialo;
 	std::cout << "\n";
 }
