@@ -244,7 +244,7 @@ std::vector<unsigned int> Paczka::dajArgumenty() { return this->argumenty; }
 
 std::string Paczka::dajDoWyswietlenia()
 {
-	std::string paczka = "\n";
+	std::string paczka = "\n\t";
 	paczka = "|OPERACJA: " + this->operacja + "|STATUS: " + this->status + "|IDENTYFIKATOR: " + std::to_string(this->identyfikator)
 		+ "|ZNACZNIK CZASU: " + this->znacznikCzasu;
 
