@@ -32,6 +32,10 @@ public:
 
 	void odczytaj(std::string wejscie);
 
+	//! Paczka do wyswietlenia
+	/*! Zwraca paczke jako string w przejrzystej do czytania formie  */
+	std::string dajDoWyswietlenia();
+
 	//! Parsowanie string na paczke 
 	/*! Pobiera dane z paczki w formie string i uzupelnia pola w klasie */
 	unsigned int parsujPaczke(std::string wejscie); 

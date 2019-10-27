@@ -29,7 +29,16 @@ void Paczka::dodajZnacznikCzasu()
 	std::time_t t = std::time(0);
 	std::tm data;
 	localtime_s(&data, &t);
-	znacznikCzasu = std::to_string(data.tm_hour) + ":"  + std::to_string(data.tm_min) + ":" + std::to_string(data.tm_sec) + "|" + std::to_string(data.tm_mday) + '.' + std::to_string(data.tm_mon + 1) + '.' + std::to_string(data.tm_year + 1900);
+	std::vector<int> godzinaMinutySekundyDzienMiesiacRokInt{ data.tm_hour ,data.tm_min,data.tm_sec,data.tm_mday,data.tm_mon + 1, data.tm_year + 1900 };
+	std::vector<std::string> wynikString;
+	for (int i = 0; i < 6; i++)
+	{
+		int temp = godzinaMinutySekundyDzienMiesiacRokInt[i];
+		if (temp < 10) { wynikString.push_back("0" + std::to_string(temp)); }
+		else { wynikString.push_back(std::to_string(temp)); }
+	}
+
+	znacznikCzasu = wynikString[0] + ":" + wynikString[1] + ":" + wynikString[2] + "/" + wynikString[3] + '.' + wynikString[4] + '.' + wynikString[5];
 }
 
 void Paczka::dodajArgument(unsigned int argument) { this->argumenty.push_back(argument); }
@@ -232,3 +241,20 @@ void Paczka::zerujPaczke()
 
 std::string Paczka::dajOperacje() { return this->operacja; }
 std::vector<unsigned int> Paczka::dajArgumenty() { return this->argumenty; }
+
+std::string Paczka::dajDoWyswietlenia()
+{
+	std::string paczka = "\n";
+	paczka = "|OPERACJA: " + this->operacja + "|STATUS: " + this->status + "|IDENTYFIKATOR: " + std::to_string(this->identyfikator)
+		+ "|ZNACZNIK CZASU: " + this->znacznikCzasu;
+
+	for (int i = 0; i < this->argumenty.size(); i++)
+	{
+		if (i == 0) { paczka += +"|LICZBY: "; }
+		paczka += std::to_string(argumenty[i]);
+		if (i != this->argumenty.size() - 1) { paczka += ", "; }
+	}
+	paczka = paczka + "|";
+
+	return paczka;
+}
