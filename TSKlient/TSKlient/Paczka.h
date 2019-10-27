@@ -18,6 +18,7 @@ public:
 
 	void dodajIdentyfikator(int identyfikator);
 	void dodajZnacznikCzasu();
+	void dodajArgument(unsigned int argument);
 	void dodajZnacznikCzasu(std::string ZC);
 	void dodajStatus(std::string status);
 	void nadpiszArgumenty(unsigned int argument);
@@ -32,7 +33,11 @@ public:
 	void odczytaj(std::string wejscie);
 	std::string dajPaczke();
 
-	void parsujPaczke(std::string wejscie);
+
+	//! Parsowanie string na paczke 
+	/*! Pobiera dane z paczki w formie string i uzupelnia pola w klasie */
+	unsigned int parsujPaczke(std::string wejscie); 
+
 	void zerujPaczke();
 
 private:
@@ -43,6 +48,6 @@ private:
 	std::string znacznikCzasu;
 	std::vector <unsigned int> argumenty;
 
-	void usunSpcaje(std::string *tekst);
+	void usunSpacaje(std::string *tekst);
 
 };

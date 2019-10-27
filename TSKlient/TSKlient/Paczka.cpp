@@ -32,20 +32,10 @@ void Paczka::dodajZnacznikCzasu()
 	znacznikCzasu = std::to_string(data.tm_hour) + ":"  + std::to_string(data.tm_min) + ":" + std::to_string(data.tm_sec) + " " + std::to_string(data.tm_mday) + '.' + std::to_string(data.tm_mon + 1) + '.' + std::to_string(data.tm_year + 1900);
 }
 
-void Paczka::dodajZnacznikCzasu(std::string ZC)
-{
-	znacznikCzasu = ZC;
-}
-
-void Paczka::dodajStatus(std::string status)
-{
-	this->status = status;
-}
-
-void Paczka::dodajIdentyfikator(int identyfikator)
-{
-	this->identyfikator = identyfikator;
-}
+void Paczka::dodajArgument(unsigned int argument) { this->argumenty.push_back(argument); }
+void Paczka::dodajZnacznikCzasu(std::string ZC){ this->znacznikCzasu = ZC;}
+void Paczka::dodajStatus(std::string status){ this->status = status;}
+void Paczka::dodajIdentyfikator(int identyfikator){ this->identyfikator = identyfikator;}
 
 void Paczka::nadpiszArgumenty(unsigned int argument)
 {
@@ -66,10 +56,10 @@ void Paczka::odczytaj(std::string wejscie)
 	while (wejscie.size() > 0)
 	{
 
-		this->usunSpcaje(&wejscie);
+		this->usunSpacaje(&wejscie);
 		while (1)
 		{
-			this->usunSpcaje(&wejscie);
+			this->usunSpacaje(&wejscie);
 			bufor = wejscie[0];
 			wejscie.erase(0, 1);
 
@@ -124,14 +114,10 @@ void Paczka::odczytaj(std::string wejscie)
 	}
 
 
-
-
 }
 
 unsigned int Paczka::dajIdentyfikator(){ return this->identyfikator;}
-
 std::string Paczka::dajZnacznikCzasu(){ return this->znacznikCzasu;}
-
 std::string Paczka::dajStatus(){ return this->status;}
 
 std::string Paczka::dajPaczke()
@@ -150,7 +136,7 @@ std::string Paczka::dajPaczke()
 	return paczka;
 }
 
-void Paczka::usunSpcaje(std::string *tekst)
+void Paczka::usunSpacaje(std::string *tekst)
 {
 	while ((*tekst)[0] == ' ')
 	{
@@ -158,29 +144,80 @@ void Paczka::usunSpcaje(std::string *tekst)
 	}
 }
 
-void Paczka::parsujPaczke(std::string wejscie) 
+unsigned int Paczka::parsujPaczke(std::string wejscie) 
 {
-	std::map<std::string, std::string> zParsowanyPakiet; //will hold the packet information extracted from the string
+	std::map<std::string, std::string> zParsowanyPakiet; //bedzie trzymac informacje wyluskane z string wejscie
 
-   //using regex to split the data into kgroups of- (key)(: )(data)(;) and put the key-data pair into the map
-	std::smatch pary;
-	std::regex wzorzecKluczWartosc("(\\w+)(:\\s{1})(\\S*)(;)");
+	//uzywam regex do podzielenia wejscia na grupy- [1]("klucz")[2](: )[3]("wartosc")[4](;)  
+	//i zapisanie [1] i [3] grupy jako klucz i wartosc w mapie
+	std::smatch para;
+	std::regex wzorzecKluczWartosc("(\\w+)(:\\s)(\\S*)(;)");
 
-
-	bool correctPacketFlag = 1;
-	while (wejscie.length() != 0 && correctPacketFlag) { //iterates over the packet string and finds data matching the (Key: data;) pattern
-		if (std::regex_search(wejscie, pary, wzorzecKluczWartosc))
+	bool flagaPoprawnyPakiet = 1;
+	while (wejscie.length() != 0 && flagaPoprawnyPakiet) //iteruje po wejsciu znajdujac jedna pare klucz-wartosc na raz
+	{ 
+		if (std::regex_search(wejscie, para, wzorzecKluczWartosc))
 		{
-			zParsowanyPakiet.insert_or_assign(pary[1], pary[3]);
-			wejscie.erase(0, pary[0].length());
+			zParsowanyPakiet.insert_or_assign(para[1], para[3]);
+			wejscie.erase(0, para[0].length()); //odcinanie od wejscia znalezionej juz pary
 		}
-		else { correctPacketFlag = 0; } // THROW EXCEPTION! if the regex doesn't match on any itteration, the packet is semantically incorect
-
-		this->identyfikator = (unsigned)std::stoi(zParsowanyPakiet.find("Identyfikator")->second);
-		this->operacja = zParsowanyPakiet.find("Operacja")->second;
-
-		//this->argumenty
+		else { flagaPoprawnyPakiet = 0; return 1; } //jezeli nie znaleziono dopasowania, paczka jest niepoprawana semantycznie, zwraca 1
 	}
+
+	//Wypisywanie zawartosci mapy- debug
+	//	std::cout << "\n-- MAPA--\n";
+	//	for (auto it = zParsowanyPakiet.begin(); it != zParsowanyPakiet.end(); ++it){ std::cout << it->first << " " << it->second <<"\n";}
+
+	//UZUPELNIANIE POL PACZKI
+	auto szukaneWMapie = zParsowanyPakiet.find("Identyfikator"); //zmienna temp zeby uniknac kilkukrotnego wywolywania find z mapy
+	//Identyfikator
+	if (szukaneWMapie!= zParsowanyPakiet.end()) {
+		if (szukaneWMapie->second != "NULL") { this->identyfikator = (unsigned)std::stoi(szukaneWMapie->second); }
+	}
+	//Operacja
+	szukaneWMapie = zParsowanyPakiet.find("Operacja");
+	if (szukaneWMapie!= zParsowanyPakiet.end())
+	{
+		this->operacja = szukaneWMapie->second;
+	}
+	//Status
+	szukaneWMapie = zParsowanyPakiet.find("Status");
+	if ( szukaneWMapie!= zParsowanyPakiet.end())
+	{
+		this->status = szukaneWMapie->second;
+	}
+	//Znacznik czasu
+	szukaneWMapie = zParsowanyPakiet.find("ZnacznikCzasu");
+	if ( szukaneWMapie!= zParsowanyPakiet.end())
+	{
+		this->znacznikCzasu = szukaneWMapie->second;
+	}
+
+	//DODAWANIE ARGUMENTOW OPERACJI
+
+	std::string aktualnaLiczba{ "Liczba1" }; 
+	bool wiecejLiczb = 1; //flaga| 1- jezeli nalezy szukac jeszcze kolejnej liczby do dodania |0 -jezeli nie
+	int licznik = 1;	//licznik dodanych liczb, sluzacy do modyfikacji zmiennej aktualna liczba
+	while (wiecejLiczb) 
+	{
+		//jezeli w mapie znajduje sie Liczba o kluczu wskazanym przez aktualnaLiczba, dodaj ja do vektora argumentow
+		auto paraLiczbaWartosc = zParsowanyPakiet.find(aktualnaLiczba); 
+		if (paraLiczbaWartosc != zParsowanyPakiet.end()) {
+			//sprawdzanie czy liczba nie jest za duza na int
+			try {
+				unsigned int temp=std::stoi(paraLiczbaWartosc->second);
+				dodajArgument(temp); //dodaje liczbe do vektora argumentow paczki
+			}
+			catch (std::out_of_range){ return 1; }
+			catch (std::invalid_argument){ return 1; }
+		}
+		else { wiecejLiczb = 0; }
+		//szukaj nastepnej liczby
+		licznik++;
+		aktualnaLiczba = "Liczba" + std::to_string(licznik);
+	}
+
+	return 0;
 }
 
 void Paczka::zerujPaczke()
