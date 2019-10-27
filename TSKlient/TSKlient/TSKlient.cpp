@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include <iostream>
 #include <string>
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <ws2tcpip.h>
 #include "Paczka.h"
 
@@ -10,7 +11,7 @@
 int main()
 {
 	Paczka paczka = Paczka();
-
+	char buffer[4096];
 
 
 	std::string ipAdress = "127.0.0.1";
@@ -24,6 +25,8 @@ int main()
 		std::cout << "Nie można uruchomic winsocka!" << std::endl;
 		return 1;
 	}
+
+	
 
 	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock == INVALID_SOCKET)
@@ -47,7 +50,7 @@ int main()
 		return 3;
 	}
 
-	char buffer[4096];
+	
 	std::string userInput;
 	int sendResult;
 	int bytesRecived;

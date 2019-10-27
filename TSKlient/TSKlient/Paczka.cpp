@@ -242,6 +242,7 @@ void Paczka::zerujPaczke()
 std::string Paczka::dajOperacje() { return this->operacja; }
 std::vector<unsigned int> Paczka::dajArgumenty() { return this->argumenty; }
 
+
 std::string Paczka::dajDoWyswietlenia()
 {
 	std::string paczka = "\n\t";
