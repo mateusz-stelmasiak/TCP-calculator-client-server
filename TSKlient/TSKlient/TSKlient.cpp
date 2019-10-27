@@ -59,8 +59,9 @@ int main()
 		paczka.dodajZnacznikCzasu();
 		userInput = paczka.dajPaczke();
 
-		
+		std::cout << userInput << std::endl;
 		sendResult = send(sock, userInput.c_str(), userInput.size() + 1, 0);
+
 		if (sendResult != SOCKET_ERROR)
 		{
 			ZeroMemory(buffer, 4096);
