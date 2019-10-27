@@ -29,7 +29,7 @@ void Paczka::dodajZnacznikCzasu()
 	std::time_t t = std::time(0);
 	std::tm data;
 	localtime_s(&data, &t);
-	znacznikCzasu = std::to_string(data.tm_hour) + ":"  + std::to_string(data.tm_min) + ":" + std::to_string(data.tm_sec) + " " + std::to_string(data.tm_mday) + '.' + std::to_string(data.tm_mon + 1) + '.' + std::to_string(data.tm_year + 1900);
+	znacznikCzasu = std::to_string(data.tm_hour) + ":"  + std::to_string(data.tm_min) + ":" + std::to_string(data.tm_sec) + "|" + std::to_string(data.tm_mday) + '.' + std::to_string(data.tm_mon + 1) + '.' + std::to_string(data.tm_year + 1900);
 }
 
 void Paczka::dodajArgument(unsigned int argument) { this->argumenty.push_back(argument); }

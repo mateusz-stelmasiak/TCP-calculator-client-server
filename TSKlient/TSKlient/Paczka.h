@@ -31,8 +31,6 @@ public:
 	std::vector <unsigned int> dajArgumenty();
 
 	void odczytaj(std::string wejscie);
-	std::string dajPaczke();
-
 
 	//! Parsowanie string na paczke 
 	/*! Pobiera dane z paczki w formie string i uzupelnia pola w klasie */

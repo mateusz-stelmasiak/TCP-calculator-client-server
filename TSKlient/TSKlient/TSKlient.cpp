@@ -13,7 +13,7 @@ int main()
 
 
 
-	std::string ipAdress = "192.168.43.72";
+	std::string ipAdress = "127.0.0.1";
 	int port = 54000;
 
 	WSAData data;
