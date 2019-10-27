@@ -21,7 +21,7 @@ class Serwer
 public:
 	Serwer();
 	~Serwer();
-	unsigned int losowaLiczba();
+	unsigned int losowyIdentyfikator();
 	void startUp();
 	void nasluchujKlienta();
 	void otrzymujDane();

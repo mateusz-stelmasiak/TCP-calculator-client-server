@@ -5,13 +5,11 @@
 Serwer::Serwer(){}
 Serwer::~Serwer(){}
 
-unsigned int Serwer::losowaLiczba() {
+unsigned int Serwer::losowyIdentyfikator() {
 	static std::default_random_engine e{};
 	std::uniform_int_distribution<unsigned int> d(0, 100);
 	return d(e);
 }
-
-
 
 void Serwer::startUp()
 {
@@ -24,20 +22,18 @@ void Serwer::startUp()
 	if (errorHandling != 0) {}
 	std::cout <<
 R"(
-    _____ ______ _______           ________ _____
-   / ____ | ____ | __  \ \        / /  ____ | __ \
-   | (___ | |__  | |__) \ \ / \  / /| |__  | |__) |
-   \___ \ | __|  |  _  / \ \ / \/ / |  __| |  _  /
-    ____) | |____| | \ \  \ / \  /  | |____| | \ \
-  | _____/|_______ |  \_\  \ / \/   |______| |  \_\
+    ______ ______ _______           ________ _____
+   /  ____| ____ |  __ \ \         / /  ____|  __ \
+  |  (___ | |__  | |__) \ \   /\  / /| |__  | |__) |
+   \___  \| ___| |  _  / \ \ /  \/ / |  __| |  _  /
+    ____) | |____| | \ \  \   /\  /  | |____| | \ \
+   |_____/|_______ |  \_\  \ /  \/   |______| |  \_\
 ____________________________________________________
 Wariant 16, Mateusz Stelmasiak, 140783
 		)";
 	std::cout << "\n";
-	nasluchujKlienta();
+	nasluchujKlienta();	
 }
-
-
 
 
 
@@ -166,7 +162,7 @@ void Serwer::odpowiedzNaAktualnaPaczke()
 		Paczka reply = aktualnaPaczka;
 
 		if (aktualnaPaczka.dajIdentyfikator() == 0) { //if the identificator field is null meaning its the first message between serwer and client
-			unsigned int identyfikator = losowaLiczba();
+			unsigned int identyfikator = losowyIdentyfikator();
 			reply.dodajIdentyfikator(identyfikator);
 			this->identyfikator = identyfikator;
 			aktualnaPaczka.dodajIdentyfikator(identyfikator) ;
@@ -203,9 +199,9 @@ void Serwer::odpowiedzNaAktualnaPaczke()
 		}
 
 		//wysylanie odpowiedzi do klienta
-		int iSendResult = 0;
-		iSendResult = send(SocketKlienta, reply.dajPaczke().c_str(), reply.dajPaczke().length(), 0);
-		if (iSendResult == SOCKET_ERROR) {
+		int rezultatWysylki = 0;
+		rezultatWysylki = send(SocketKlienta, reply.dajPaczke().c_str(), reply.dajPaczke().length(), 0);
+		if (rezultatWysylki == SOCKET_ERROR) {
 			printf("send failed with error: %d\n", WSAGetLastError());
 			closesocket(SocketKlienta);
 			WSACleanup();
