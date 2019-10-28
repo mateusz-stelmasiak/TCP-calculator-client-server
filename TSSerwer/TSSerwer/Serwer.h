@@ -69,7 +69,12 @@ Status: ...;
 Identyfikator: ...;
 Czas: ...;
 ---------DANE-------
-
+Liczba1: ..;
+Liczba2: ..;
+.
+.
+LiczbaN: ..;
+Koniec: TAK;
 
 
 OPERACJE:
@@ -81,7 +86,6 @@ OPERACJE:
 "potega" - potêgowanie  pierwszy argument do potêgi drugiego argu
 "logarytm" - logarytm z pierwszego argumentu o podstawie drugiego argumentu
 "pierwiastek"
-
 
 */
 

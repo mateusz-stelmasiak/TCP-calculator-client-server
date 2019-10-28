@@ -316,7 +316,7 @@ std::string Serwer::generujInformacjeOSerwerze()
 	cip[2] = ((struct in_addr *)(host->h_addr))->S_un.S_un_b.s_b3;
 	cip[3] = ((struct in_addr *)(host->h_addr))->S_un.S_un_b.s_b4;
 	ip = std::to_string((int)cip[0]) + "." + std::to_string((int)cip[1]) + "." + std::to_string((int)cip[2]) + "." + std::to_string((int)cip[3]);
-	return "IP serwera: " + ip + " Port nasluchujacy: " + PORT_NASLUCHUJACY;
+	return "IP serwera: " + ip + "| Port nasluchujacy: " + PORT_NASLUCHUJACY;
 }
 std::string Serwer::generujInformacjeOKliencie(SOCKADDR_IN addr)
 {
