@@ -11,27 +11,34 @@
 int main()
 {
 	Paczka paczka = Paczka();
+	Paczka otrzymana = Paczka();
 	char buffer[4096];
 
 
 	std::string ipAdress = "127.0.0.1";
 	int port = 54000;
-
+	SOCKET newSocket;
+	std::string userInput;
+	int result;
+	int bytesRecived;
 	WSAData data;
-	WORD ver = MAKEWORD(2, 2);
-	int WSResult = WSAStartup(ver, &data);
-	if (WSResult != 0)
+	WORD ver;
+
+	//inicjacja biblioteki
+	ver = MAKEWORD(2, 2);
+	result = WSAStartup(ver, &data);
+	if (result != 0)
 	{
-		std::cout << "Nie można uruchomic winsocka!" << std::endl;
+		std::cout << "Klient-> Nie można uruchomic winsocka!" << std::endl;
 		return 1;
 	}
 
 	
-
-	SOCKET sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock == INVALID_SOCKET)
+	//tworzenie socketu
+	newSocket = socket(AF_INET, SOCK_STREAM, 0);
+	if (newSocket == INVALID_SOCKET)
 	{
-		std::cout << "Nie można podłączyć się do socketu!" << std::endl;
+		std::cout << "Klient-> Nie można podłączyć się do socketu!" << std::endl;
 		WSACleanup();
 		return 2;
 	}
@@ -39,40 +46,57 @@ int main()
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
 	hint.sin_port = htons(port);
-	inet_pton(AF_INET, ipAdress.c_str(), &hint.sin_addr);
+	inet_pton(AF_INET, ipAdress.c_str(), &hint.sin_addr); //konwertuje string na numeryczny adres ip
 
-	int connResult = connect(sock, (sockaddr*)&hint, sizeof(hint));
-	if (connResult == SOCKET_ERROR)
+	//łączenie się z serwerem
+	result = connect(newSocket, (sockaddr*)&hint, sizeof(hint));
+	if (result == SOCKET_ERROR)
 	{
-		std::cout << "Nie mozna polaczyc się z serwerem! " << std::endl;
-		closesocket(sock);
+		std::cout << "Klient-> Nie mozna polaczyc się z serwerem! " << std::endl;
+		closesocket(newSocket);
 		WSACleanup();
 		return 3;
 	}
 
-	
-	std::string userInput;
-	int sendResult;
-	int bytesRecived;
+	//działanie (wysyłanie i odbieranie)
 	do
 	{
-		std::cout << "> ";
+		std::cout << "-> ";
 		getline(std::cin, userInput);
-		paczka.odczytaj(userInput);
+		result = paczka.odczytaj(userInput);
+		if (result != 0)
+		{
+			std::cout << "Klient-> Bledne dzialanie, podaj tylko jeden operator!" << std::endl;
+			continue;
+		}
 		paczka.dodajZnacznikCzasu();
 		userInput = paczka.dajPaczke();
 
-		std::cout << userInput << std::endl;
-		sendResult = send(sock, userInput.c_str(), userInput.size() + 1, 0);
+		//std::cout << userInput << std::endl; //testy
+		result = send(newSocket, userInput.c_str(), userInput.size() + 1, 0);
 
-		if (sendResult != SOCKET_ERROR)
+		if (result != SOCKET_ERROR)
 		{
 			ZeroMemory(buffer, 4096);
 
-			bytesRecived = recv(sock, buffer, 4096, 0);
+			bytesRecived = recv(newSocket, buffer, 4096, 0);
 			if (bytesRecived > 0)
 			{
-				std::cout << "SERVER> " << std::string(buffer, 0, bytesRecived) << std::endl;
+				//std::cout << "SERWER-> " << std::string(buffer, 0, bytesRecived) << std::endl; //testy
+				otrzymana.parsujPaczke(std::string(buffer, 0, bytesRecived));
+				if (paczka.dajIdentyfikator() == 0)
+				{
+					paczka.dodajIdentyfikator(otrzymana.dajIdentyfikator());
+				}
+
+				if (paczka.dajIdentyfikator() != otrzymana.dajIdentyfikator())
+				{
+					std::cout << "Identyfikator nie jest zgodny!" << std::endl;
+					continue;
+				}
+
+				std::cout << "Wynik z serwera-> " << otrzymana.dajArgumenty()[0] << std::endl;
+
 			}
 		}
 
@@ -80,7 +104,7 @@ int main()
 
 	} while (userInput.size() > 0);
 
-	closesocket(sock);
+	closesocket(newSocket);
 	WSACleanup();
 
 }

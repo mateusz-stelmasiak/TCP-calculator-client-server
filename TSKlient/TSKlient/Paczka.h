@@ -32,7 +32,7 @@ public:
 
 	
 
-	void odczytaj(std::string wejscie);
+	int odczytaj(std::string wejscie); //nadpisuje wartoœci algorytmów i operacji na podstwie podanego dzia³ania
 
 	//! Paczka do wyswietlenia
 	/*! Zwraca paczke jako string w przejrzystej do czytania formie  */
