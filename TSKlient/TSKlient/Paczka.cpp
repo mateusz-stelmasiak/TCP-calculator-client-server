@@ -78,8 +78,12 @@ int Paczka::odczytaj(std::string wejscie)
 				bliczba = 0;
 				break;
 			}
-			
-			bliczba = bliczba*10 + std::stoi(&bufor, nullptr, 10);
+
+			if (bliczba >= ((UINT_MAX - std::stoul(&bufor, nullptr, 10))/10.0) )
+			{
+				return 2;
+			}
+			bliczba = bliczba*10 + std::stoul(&bufor, nullptr, 10);
 		}
 		
 
@@ -116,12 +120,12 @@ int Paczka::odczytaj(std::string wejscie)
 				this->operacja = "Logarytm";
 			}
 
-			if (bufor == 'p')
+			if (bufor == '^')
 			{
 				this->operacja = "Potega";
 			}
 
-			if (bufor == 'r')
+			if (bufor == 'p')
 			{
 				this->operacja = "Pierwiastek";
 			}
@@ -171,72 +175,77 @@ void Paczka::usunSpacaje(std::string *tekst)
 	}
 }
 
-unsigned int Paczka::parsujPaczke(std::string wejscie) 
+std::string Paczka::parsujPaczke(std::string wejscie)
 {
 	std::map<std::string, std::string> zParsowanyPakiet; //bedzie trzymac informacje wyluskane z string wejscie
 
 	//uzywam regex do podzielenia wejscia na grupy- [1]("klucz")[2](: )[3]("wartosc")[4](;)  
 	//i zapisanie [1] i [3] grupy jako klucz i wartosc w mapie
 	std::smatch para;
-	std::regex wzorzecKluczWartosc("(\\w+)(:\\s)(.*)(;)");
+	std::regex wzorzecKluczWartosc("(\\w+)(:\\s)(\\S+)(;)");
 
 	bool flagaPoprawnyPakiet = 1;
 	while (wejscie.length() != 0 && flagaPoprawnyPakiet) //iteruje po wejsciu znajdujac jedna pare klucz-wartosc na raz
-	{ 
+	{
 		if (std::regex_search(wejscie, para, wzorzecKluczWartosc))
 		{
 			zParsowanyPakiet.insert_or_assign(para[1], para[3]);
 			wejscie.erase(0, para[0].length()); //odcinanie od wejscia znalezionej juz pary
 		}
-		else { flagaPoprawnyPakiet = 0; return 1; } //jezeli nie znaleziono dopasowania, paczka jest niepoprawana semantycznie, zwraca 1
+		else { flagaPoprawnyPakiet = 0; return "Blad struktury paczki"; }
+		//jezeli nie znaleziono dopasowania, paczka jest niepoprawana strukturalnie
 	}
 
 	//Wypisywanie zawartosci mapy- debug
-	//std::cout << "\n-- MAPA--\n";
-	//for (auto it = zParsowanyPakiet.begin(); it != zParsowanyPakiet.end(); ++it){ std::cout << it->first << " " << it->second <<"\n";}
+	/*std::cout << "\n-- MAPA--\n";
+	for (auto it = zParsowanyPakiet.begin(); it != zParsowanyPakiet.end(); ++it){ std::cout << it->first << " " << it->second <<"\n";}*/
 
 	//UZUPELNIANIE POL PACZKI
 	auto szukaneWMapie = zParsowanyPakiet.find("Identyfikator"); //zmienna temp zeby uniknac kilkukrotnego wywolywania find z mapy
 	//Identyfikator
-	if (szukaneWMapie!= zParsowanyPakiet.end()) {
+	if (szukaneWMapie != zParsowanyPakiet.end())
+	{
 		if (szukaneWMapie->second != "NULL") { this->identyfikator = (unsigned)std::stoi(szukaneWMapie->second); }
 	}
+	else { return "Brak identyfikatora"; }
 	//Operacja
 	szukaneWMapie = zParsowanyPakiet.find("Operacja");
-	if (szukaneWMapie!= zParsowanyPakiet.end())
+	if (szukaneWMapie != zParsowanyPakiet.end())
 	{
 		this->operacja = szukaneWMapie->second;
 	}
+	else { return "Brak operacji"; }
 	//Status
 	szukaneWMapie = zParsowanyPakiet.find("Status");
-	if ( szukaneWMapie!= zParsowanyPakiet.end())
+	if (szukaneWMapie != zParsowanyPakiet.end())
 	{
 		this->status = szukaneWMapie->second;
 	}
+	else { return "Brak statusu"; }
 	//Znacznik czasu
 	szukaneWMapie = zParsowanyPakiet.find("ZnacznikCzasu");
-	if ( szukaneWMapie!= zParsowanyPakiet.end())
+	if (szukaneWMapie != zParsowanyPakiet.end())
 	{
 		this->znacznikCzasu = szukaneWMapie->second;
 	}
-
+	else { return "Brak znacznika czasu"; }
 	//DODAWANIE ARGUMENTOW OPERACJI
 
-	std::string aktualnaLiczba{ "Liczba1" }; 
+	std::string aktualnaLiczba{ "Liczba1" };
 	bool wiecejLiczb = 1; //flaga| 1- jezeli nalezy szukac jeszcze kolejnej liczby do dodania |0 -jezeli nie
 	int licznik = 1;	//licznik dodanych liczb, sluzacy do modyfikacji zmiennej aktualna liczba
-	while (wiecejLiczb) 
+	while (wiecejLiczb)
 	{
 		//jezeli w mapie znajduje sie Liczba o kluczu wskazanym przez aktualnaLiczba, dodaj ja do vektora argumentow
-		auto paraLiczbaWartosc = zParsowanyPakiet.find(aktualnaLiczba); 
+		auto paraLiczbaWartosc = zParsowanyPakiet.find(aktualnaLiczba);
 		if (paraLiczbaWartosc != zParsowanyPakiet.end()) {
 			//sprawdzanie czy liczba nie jest za duza na int
 			try {
-				unsigned int temp=std::stoi(paraLiczbaWartosc->second);
+				unsigned int temp = std::stoul(paraLiczbaWartosc->second);
 				dodajArgument(temp); //dodaje liczbe do vektora argumentow paczki
 			}
-			catch (std::out_of_range){ return 1; }
-			catch (std::invalid_argument){ return 1; }
+			catch (std::out_of_range) { return "Liczby poza zakresem"; }
+			catch (std::invalid_argument) { return "Niepoprawne argumenty"; }
 		}
 		else { wiecejLiczb = 0; }
 		//szukaj nastepnej liczby
@@ -244,7 +253,7 @@ unsigned int Paczka::parsujPaczke(std::string wejscie)
 		aktualnaLiczba = "Liczba" + std::to_string(licznik);
 	}
 
-	return 0;
+	return "OK";
 }
 
 void Paczka::zerujPaczke()
