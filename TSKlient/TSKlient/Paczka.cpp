@@ -53,7 +53,7 @@ void Paczka::nadpiszArgumenty(unsigned int argument)
 }
 
 
-void Paczka::odczytaj(std::string wejscie)
+int Paczka::odczytaj(std::string wejscie)
 {
 	this->argumenty.clear();
 	this->operacja = "NULL";
@@ -110,19 +110,37 @@ void Paczka::odczytaj(std::string wejscie)
 			{
 				this->operacja = "Dzielenie";
 			}
+
+			if (bufor == 'l')
+			{
+				this->operacja = "Logarytm";
+			}
+
+			if (bufor == 'p')
+			{
+				this->operacja = "Potegowanie";
+			}
+
+			if (bufor == 'r')
+			{
+				this->operacja = "Pierwiastkowanie";
+			}
+
+			if (bufor == '%')
+			{
+				this->operacja = "Modulo";
+			}
 		}
 		else
 		{
 			if (op != bufor)
 			{
-
-				std::cout << "Bledzne dzialanie! " << std::endl;
-
+				return 1;
 			}
 		}
 	}
 
-
+	return 0;
 }
 
 unsigned int Paczka::dajIdentyfikator(){ return this->identyfikator;}
