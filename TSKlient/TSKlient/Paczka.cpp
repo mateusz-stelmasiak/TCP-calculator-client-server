@@ -118,12 +118,12 @@ int Paczka::odczytaj(std::string wejscie)
 
 			if (bufor == 'p')
 			{
-				this->operacja = "Potegowanie";
+				this->operacja = "Potega";
 			}
 
 			if (bufor == 'r')
 			{
-				this->operacja = "Pierwiastkowanie";
+				this->operacja = "Pierwiastek";
 			}
 
 			if (bufor == '%')
@@ -178,7 +178,7 @@ unsigned int Paczka::parsujPaczke(std::string wejscie)
 	//uzywam regex do podzielenia wejscia na grupy- [1]("klucz")[2](: )[3]("wartosc")[4](;)  
 	//i zapisanie [1] i [3] grupy jako klucz i wartosc w mapie
 	std::smatch para;
-	std::regex wzorzecKluczWartosc("(\\w+)(:\\s)(\\S*)(;)");
+	std::regex wzorzecKluczWartosc("(\\w+)(:\\s)(.*)(;)");
 
 	bool flagaPoprawnyPakiet = 1;
 	while (wejscie.length() != 0 && flagaPoprawnyPakiet) //iteruje po wejsciu znajdujac jedna pare klucz-wartosc na raz
@@ -192,8 +192,8 @@ unsigned int Paczka::parsujPaczke(std::string wejscie)
 	}
 
 	//Wypisywanie zawartosci mapy- debug
-	//	std::cout << "\n-- MAPA--\n";
-	//	for (auto it = zParsowanyPakiet.begin(); it != zParsowanyPakiet.end(); ++it){ std::cout << it->first << " " << it->second <<"\n";}
+	//std::cout << "\n-- MAPA--\n";
+	//for (auto it = zParsowanyPakiet.begin(); it != zParsowanyPakiet.end(); ++it){ std::cout << it->first << " " << it->second <<"\n";}
 
 	//UZUPELNIANIE POL PACZKI
 	auto szukaneWMapie = zParsowanyPakiet.find("Identyfikator"); //zmienna temp zeby uniknac kilkukrotnego wywolywania find z mapy
