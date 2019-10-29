@@ -146,6 +146,7 @@ void Serwer::otrzymujDane()
 		}
 		else { //jezeli wystapil blad socket'a
 			wypisz("Blad socket'a z kodem: " +std::to_string(flagaDanych), "powrot do nasluchiwania");
+			this->identyfikator = 0; //resetowanie identyfikatora sesji
 			nasluchujKlienta();
 		}
 	} while (flagaDanych > 0);
@@ -188,10 +189,10 @@ void Serwer::odpowiedzNaAktualnaPaczke()
 					else if (operacja == "Potega") { wynik = obliczPotege(argumenty, status); }
 					else if (operacja == "Pierwiastek") { wynik = obliczPierwiastek(argumenty, status); }
 					else if (operacja == "Modulo") { wynik = obliczModulo(argumenty, status);}
-					else { status = "ERROR: Nieznana operajca"; }
+					else { status = "Nieznana operajca"; }
 				}
-				else { status = "ERROR: Za malo argumentow"; }
-			}else { status = "ERROR: Brak operacji"; }
+				else { status = "Za malo argumentow"; }
+			}else { status = "Brak operacji"; }
 	
 			//jezeli w odpowiedzi nie poprawil sie blad, wpisuje sie wynik jako argument paczkiOdpowiedzi
 			if (wynik > -1) { paczkaOdpowiedz.nadpiszArgumenty(wynik); }
@@ -201,7 +202,7 @@ void Serwer::odpowiedzNaAktualnaPaczke()
 			paczkaOdpowiedz.dodajStatus(status);
 			paczkaOdpowiedz.dajZnacznikCzasu();
 		}
-		else { wyslijPaczkeBledu("ERROR: Niepoprawny identyfikator"); }
+		else { wyslijPaczkeBledu("Niepoprawny identyfikator"); }
 
 		//wysylanie odpowiedzi do klienta
 		int rezultatWysylki = 0;
@@ -234,7 +235,7 @@ unsigned int Serwer::obliczOdejmowanie(std::vector <unsigned int> argumenty, std
 	int wynik = argumenty[0];
 	for (int i = 1; i < argumenty.size();i++) {
 		wynik -= argumenty[i];
-		if (wynik < 0) { status = "ERROR: Mniejsze od zera!"; return -1; }
+		if (wynik < 0) { status = "Mniejsze od zera"; return -1; }
 	}
 	return wynik;
 }
@@ -242,7 +243,7 @@ unsigned int Serwer::obliczOdejmowanie(std::vector <unsigned int> argumenty, std
 unsigned int Serwer::obliczMnozenie(std::vector <unsigned int> argumenty, std::string& status) {
 	int wynik = 1;
 	for (auto i : argumenty) {
-		if (wynik!=0 && i > UINT_MAX/wynik ) { status = "ERROR: Overflow!"; return -1; }
+		if (wynik!=0 && i > UINT_MAX/wynik ) { status = "Przepelnienie"; return -1; }
 		wynik *= i;
 	}
 	return wynik; 
@@ -251,7 +252,7 @@ unsigned int Serwer::obliczMnozenie(std::vector <unsigned int> argumenty, std::s
 unsigned int Serwer::obliczDzielenie(std::vector <unsigned int> argumenty, std::string& status) {
 	int wynik = argumenty[0];
 	for (int i = 1; i < argumenty.size(); i++) {
-		if (argumenty[i] == 0) { status = "ERROR: Dzielenie przez zero!";  return -1; }
+		if (argumenty[i] == 0) { status = "Dzielenie przez zero";  return -1; }
 		wynik /= argumenty[i];
 	}
 	return wynik; 
@@ -261,7 +262,7 @@ unsigned int Serwer::obliczModulo(std::vector<unsigned int> argumenty, std::stri
 {
 	int wynik = argumenty[0];
 	for (int i = 1; i < argumenty.size(); i++) {
-		if (argumenty[i] == 0) { status = "ERROR: Dzielenie przez zero!";  return -1; }
+		if (argumenty[i] == 0) { status = "Dzielenie przez zero";  return -1; }
 		wynik %= argumenty[i];
 	}
 	return wynik;
@@ -269,11 +270,10 @@ unsigned int Serwer::obliczModulo(std::vector<unsigned int> argumenty, std::stri
 
 unsigned int Serwer::obliczPotege(std::vector<unsigned int> argumenty, std::string & status)
 {
-	if (argumenty.size() > 2) { status = "ERROR: Za duzo argumentow!"; return -1; }
-	if (argumenty.size() < 2) { status = "ERROR: Za malo argumentow!"; return -1; }
+	if (argumenty.size() > 2) { status = "Za duzo argumentow"; return -1; }
 	int wynik = 1;
 	for (int i = 1; i < argumenty[1]; i++) {
-		if (argumenty[0]> UINT_MAX / wynik) { status = "ERROR: Overflow!"; return -1; }
+		if (argumenty[0]> UINT_MAX / wynik) { status = "Overflow"; return -1; }
 		wynik *=argumenty[0];
 	}
 	return wynik;
@@ -281,21 +281,21 @@ unsigned int Serwer::obliczPotege(std::vector<unsigned int> argumenty, std::stri
 
 unsigned int Serwer::obliczPierwiastek(std::vector<unsigned int> argumenty, std::string & status)
 {
-	if (argumenty.size() > 2) { status = "ERROR: Za duzo argumentow!"; return -1; }
+	if (argumenty.size() > 2) { status = "Za duzo argumentow"; return -1; }
 	return std::pow(argumenty[1], 1.0 / argumenty[0]);
 }
 
 unsigned int Serwer::obliczDodawanie(std::vector <unsigned int> argumenty,std::string& status) {
 	int wynik = 0;
 	for (auto i : argumenty) {
-		if ((i > UINT_MAX - wynik)) {status = "ERROR: Overflow!"; return -1;}	//zapobieganie overflow
+		if ((i > UINT_MAX - wynik)) {status = "Przepelnienie"; return -1;}	//zapobieganie overflow
 		wynik += i;
 	}
 	return wynik; 
 }
 
 unsigned int Serwer::obliczLogarytm(std::vector <unsigned int> argumenty, std::string& status) {
-	if (argumenty.size() > 2) { status = "ERROR: Za duzo argumentow!"; return -1;}
+	if (argumenty.size() > 2) { status = "Za duzo argumentow"; return -1;}
 	return (int)(log(argumenty[0])/ log(argumenty[1]));
 }
 

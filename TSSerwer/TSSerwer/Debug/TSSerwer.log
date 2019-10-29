@@ -1,7 +1,4 @@
-﻿  Serwer.cpp
-c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(215): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(233): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(243): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(255): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(265): warning C4244: "return": konwersja z "double" do "unsigned int", możliwa utrata danych
+﻿  Paczka.cpp
+c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\paczka.cpp(140): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\paczka.cpp(254): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
   TSSerwer.vcxproj -> C:\Users\user\Documents\GitHub\tsProjekt\TSSerwer\Debug\TSSerwer.exe

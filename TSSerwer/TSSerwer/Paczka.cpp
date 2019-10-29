@@ -162,7 +162,7 @@ std::string Paczka::parsujPaczke(std::string wejscie)
 	//uzywam regex do podzielenia wejscia na grupy- [1]("klucz")[2](: )[3]("wartosc")[4](;)  
 	//i zapisanie [1] i [3] grupy jako klucz i wartosc w mapie
 	std::smatch para;
-	std::regex wzorzecKluczWartosc("(\\w+)(:\\s)(\\S*)(;)");
+	std::regex wzorzecKluczWartosc("(\\w+)(:\\s)((?:\\w+)(?:\\s)*)+(;)");
 
 	bool flagaPoprawnyPakiet = 1;
 	while (wejscie.length() != 0 && flagaPoprawnyPakiet) //iteruje po wejsciu znajdujac jedna pare klucz-wartosc na raz
@@ -172,7 +172,7 @@ std::string Paczka::parsujPaczke(std::string wejscie)
 			zParsowanyPakiet.insert_or_assign(para[1], para[3]);
 			wejscie.erase(0, para[0].length()); //odcinanie od wejscia znalezionej juz pary
 		}
-		else {flagaPoprawnyPakiet = 0; return "ERROR: blad struktury paczki"; } 
+		else {flagaPoprawnyPakiet = 0; return "Blad struktury paczki"; } 
 		//jezeli nie znaleziono dopasowania, paczka jest niepoprawana strukturalnie
 	}
 
@@ -186,25 +186,25 @@ std::string Paczka::parsujPaczke(std::string wejscie)
 	if (szukaneWMapie != zParsowanyPakiet.end()) 
 	{
 		if (szukaneWMapie->second != "NULL") { this->identyfikator = (unsigned)std::stoi(szukaneWMapie->second); }
-	}else { return "ERROR: brak identyfikatora"; }
+	}else { return "Brak identyfikatora"; }
 	//Operacja
 	szukaneWMapie = zParsowanyPakiet.find("Operacja");
 	if (szukaneWMapie != zParsowanyPakiet.end())
 	{
 		this->operacja = szukaneWMapie->second;
-	}else { return "ERROR: brak operacji";}
+	}else { return "Brak operacji";}
 	//Status
 	szukaneWMapie = zParsowanyPakiet.find("Status");
 	if (szukaneWMapie != zParsowanyPakiet.end())
 	{
 		this->status = szukaneWMapie->second;
-	}else { return "ERROR: brak statusu"; }
+	}else { return "Brak statusu"; }
 	//Znacznik czasu
 	szukaneWMapie = zParsowanyPakiet.find("ZnacznikCzasu");
 	if (szukaneWMapie != zParsowanyPakiet.end())
 	{
 		this->znacznikCzasu = szukaneWMapie->second;
-	}else { return "ERROR: brak znacznika czasu"; }
+	}else { return "Brak znacznika czasu"; }
 	//DODAWANIE ARGUMENTOW OPERACJI
 
 	std::string aktualnaLiczba{ "Liczba1" };
@@ -220,8 +220,8 @@ std::string Paczka::parsujPaczke(std::string wejscie)
 				unsigned int temp = std::stoi(paraLiczbaWartosc->second);
 				dodajArgument(temp); //dodaje liczbe do vektora argumentow paczki
 			}
-			catch (std::out_of_range) { return "ERROR: liczby poza zakresem"; }
-			catch (std::invalid_argument) { return "ERROR: niepoprawne argumenty"; }
+			catch (std::out_of_range) { return "Liczby poza zakresem"; }
+			catch (std::invalid_argument) { return "Niepoprawne argumenty"; }
 		}
 		else { wiecejLiczb = 0; }
 		//szukaj nastepnej liczby
