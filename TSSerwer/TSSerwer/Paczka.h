@@ -8,6 +8,24 @@
 #include <regex>
 
 
+
+/*
+BUDOWA PAKIETU:
+----------NAG£ÓWEK---------------
+Operacja: ...; (
+Status: ...;
+Identyfikator: ...;
+Czas: ...;
+---------DANE-------
+Liczba1: ..;
+Liczba2: ..;
+.
+.
+LiczbaN: ..;
+Koniec: TAK;
+
+*/
+
 class Paczka
 {
 public:

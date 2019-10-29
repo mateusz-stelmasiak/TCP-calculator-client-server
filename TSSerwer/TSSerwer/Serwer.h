@@ -14,36 +14,57 @@
 #include <string>
 #include <random>
 
-#pragma comment (lib, "ws2_32.lib") //adding the winsoc library
+#pragma comment (lib, "ws2_32.lib") //dodawanie biblioteki winsock
 
 #define PORT_NASLUCHUJACY "54000"
-#define DLUGOSC_BUFFERU 4096 //4GB buffer
+#define DLUGOSC_BUFFERU 4096 
 
 class Serwer
 {
 public:
 	Serwer();
 	~Serwer();
-	unsigned int losowyIdentyfikator();
-	void startUp();
-	void nasluchujKlienta();
-	void otrzymujDane();
-	void wyslijPaczkeBledu(std::string blad);
-	void odpowiedzNaAktualnaPaczke();
+
+
+	//! Uruchamianie serwera
+	/** Inicjalizuje dane biblioteki winsock i wypisuje naglowek serwera
+	 	nastepnie wywoluje nasluchujKlienta()
+	*/
+	int startUp();
 
 private:
 	char buffer[DLUGOSC_BUFFERU];
 	int bufferDlugosc = DLUGOSC_BUFFERU;
 
-	//winSock data
-	WSADATA wsaData;
-	SOCKET SocketSluchajacy = INVALID_SOCKET; //socket for listening
-	SOCKET SocketKlienta = INVALID_SOCKET;
+	
+	WSADATA wsaData; //dane winSock'a
+	SOCKET SocketSluchajacy = INVALID_SOCKET; //socket oczekujacy na polaczenie	
+	SOCKET SocketKlienta = INVALID_SOCKET; //socket clienta
 
-	unsigned int identyfikator = 0; //0 if no client has an established session
+	unsigned int identyfikator = 0; //identyfikator sesji
 	Paczka aktualnaPaczka;
 
-	//functions for the mathematical operations
+
+
+	//! Czekanie na polaczenie z klientem
+	/*! Ustawia parametry socket'u nasluchujacego, wypisuje jego dane do konsoli
+		i oczekuje na polaczenie ze strony klienta
+	*/
+	void nasluchujKlienta();
+
+	//! Nasluchuje klientow
+	/*! Pobiera dane z paczki w formie string i uzupelnia pola w klasie
+		Zwraca OK dla poprawnych paczek, i opis bledu dla niepoprawnych
+	*/
+	void otrzymujDane();
+
+
+	unsigned int generujLosowyIdentyfikator();
+	void wyslijPaczkeBledu(std::string blad);
+	void odpowiedzNaAktualnaPaczke();
+
+
+	//FUNKCJE OPERACJI MATEMATYCZNYCH
 	unsigned int obliczDodawanie(std::vector<unsigned int> argumenty, std::string & status);
 	unsigned int obliczLogarytm(std::vector<unsigned int> argumenty, std::string & status);
 	unsigned int obliczOdejmowanie(std::vector<unsigned int> argumenty, std::string & status);
@@ -53,40 +74,18 @@ private:
 	unsigned int obliczPotege(std::vector<unsigned int> argumenty, std::string & status);
 	unsigned int obliczPierwiastek(std::vector<unsigned int> argumenty, std::string & status);
 
+
+
+	//GENEROWANIE DANYCH
 	std::string generujZnacznikCzasu();
 	std::string generujInformacjeOSerwerze();
 	std::string generujInformacjeOKliencie(SOCKADDR_IN addr);
+
+	//WYPISYWANIE DO KONSOLI
 	void wypisz(std::string doWypisania);
 	void wypisz(std::string naglowek, std::string cialo);
 };
 
 
-/*
-BUDOWA PAKIETU:
-----------NAG£ÓWEK---------------
-Operacja: ...;
-Status: ...;
-Identyfikator: ...;
-Czas: ...;
----------DANE-------
-Liczba1: ..;
-Liczba2: ..;
-.
-.
-LiczbaN: ..;
-Koniec: TAK;
-
-
-OPERACJE:
-„dodaj” – dodawanie
-„odejmij” – odejmowanie
-„mnozenie” – mno¿enie
-„dzielenie” –dzielenie
-"modulo" - modulo
-"potega" - potêgowanie  pierwszy argument do potêgi drugiego argu
-"logarytm" - logarytm z pierwszego argumentu o podstawie drugiego argumentu
-"pierwiastek"
-
-*/
 
 
