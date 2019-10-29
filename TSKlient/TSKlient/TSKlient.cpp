@@ -15,7 +15,7 @@ int main()
 	char buffer[4096];
 
 
-	std::string ipAdress = "127.0.0.1";
+	std::string ipAdress;
 	int port = 54000;
 	SOCKET newSocket;
 	std::string userInput;
@@ -23,7 +23,9 @@ int main()
 	int bytesRecived;
 	WSAData data;
 	WORD ver;
-
+	std::cout << "Klient-> Daj IP Serwera: " << std::endl;
+	std::cin >> ipAdress;
+	//ipAdress = "192.168.43.72";
 	//inicjacja biblioteki
 	ver = MAKEWORD(2, 2);
 	result = WSAStartup(ver, &data);
@@ -72,7 +74,7 @@ int main()
 		paczka.dodajZnacznikCzasu();
 		userInput = paczka.dajPaczke();
 
-		//std::cout << userInput << std::endl; //testy
+		std::cout << userInput << std::endl; //testy
 		result = send(newSocket, userInput.c_str(), userInput.size() + 1, 0);
 
 		if (result != SOCKET_ERROR)
@@ -82,8 +84,13 @@ int main()
 			bytesRecived = recv(newSocket, buffer, 4096, 0);
 			if (bytesRecived > 0)
 			{
-				//std::cout << "SERWER-> " << std::string(buffer, 0, bytesRecived) << std::endl; //testy
+				std::cout << "SERWER-> " << std::string(buffer, 0, bytesRecived) << std::endl; //testy
+
+				otrzymana = Paczka();
 				otrzymana.parsujPaczke(std::string(buffer, 0, bytesRecived));
+				
+
+				
 				if (paczka.dajIdentyfikator() == 0)
 				{
 					paczka.dodajIdentyfikator(otrzymana.dajIdentyfikator());
@@ -94,8 +101,16 @@ int main()
 					std::cout << "Identyfikator nie jest zgodny!" << std::endl;
 					continue;
 				}
-
-				std::cout << "Wynik z serwera-> " << otrzymana.dajArgumenty()[0] << std::endl;
+				
+				std::cout << otrzymana.dajStatus() << std::endl;
+				if (otrzymana.dajArgumenty().size() < 0.5)
+				{
+					std::cout << "Serwer Blad-> " << otrzymana.dajStatus() << std::endl;
+				}
+				else
+				{
+					std::cout << "Wynik z serwera-> " << otrzymana.dajArgumenty()[0] << std::endl;
+				}
 
 			}
 		}
