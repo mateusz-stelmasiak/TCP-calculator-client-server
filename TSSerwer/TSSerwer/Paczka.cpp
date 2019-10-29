@@ -44,6 +44,7 @@ void Paczka::dodajZnacznikCzasu()
 void Paczka::dodajArgument(unsigned int argument) { this->argumenty.push_back(argument); }
 void Paczka::dodajZnacznikCzasu(std::string ZC) { this->znacznikCzasu = ZC; }
 void Paczka::dodajStatus(std::string status) { this->status = status; }
+void Paczka::dodajOperacje(std::string operacja) { this->operacja = operacja; }
 void Paczka::dodajIdentyfikator(int identyfikator) { this->identyfikator = identyfikator; }
 
 void Paczka::nadpiszArgumenty(unsigned int argument)
@@ -81,7 +82,7 @@ void Paczka::odczytaj(std::string wejscie)
 				break;
 			}
 
-			bliczba = bliczba * 10 + std::stoi(&bufor, nullptr, 10);
+			bliczba = bliczba * 10 + std::stoul(&bufor, nullptr, 10);
 		}
 
 
@@ -162,7 +163,7 @@ std::string Paczka::parsujPaczke(std::string wejscie)
 	//uzywam regex do podzielenia wejscia na grupy- [1]("klucz")[2](: )[3]("wartosc")[4](;)  
 	//i zapisanie [1] i [3] grupy jako klucz i wartosc w mapie
 	std::smatch para;
-	std::regex wzorzecKluczWartosc("(\\w+)(:\\s)((?:\\w+)(?:\\s)*)+(;)");
+	std::regex wzorzecKluczWartosc("(\\w+)(:\\s)(\\S+)(;)");
 
 	bool flagaPoprawnyPakiet = 1;
 	while (wejscie.length() != 0 && flagaPoprawnyPakiet) //iteruje po wejsciu znajdujac jedna pare klucz-wartosc na raz
@@ -172,7 +173,7 @@ std::string Paczka::parsujPaczke(std::string wejscie)
 			zParsowanyPakiet.insert_or_assign(para[1], para[3]);
 			wejscie.erase(0, para[0].length()); //odcinanie od wejscia znalezionej juz pary
 		}
-		else {flagaPoprawnyPakiet = 0; return "Blad struktury paczki"; } 
+		else {flagaPoprawnyPakiet = 0; return "Blad_struktury_paczki"; } 
 		//jezeli nie znaleziono dopasowania, paczka jest niepoprawana strukturalnie
 	}
 
@@ -215,13 +216,14 @@ std::string Paczka::parsujPaczke(std::string wejscie)
 		//jezeli w mapie znajduje sie Liczba o kluczu wskazanym przez aktualnaLiczba, dodaj ja do vektora argumentow
 		auto paraLiczbaWartosc = zParsowanyPakiet.find(aktualnaLiczba);
 		if (paraLiczbaWartosc != zParsowanyPakiet.end()) {
-			//sprawdzanie czy liczba nie jest za duza na int
+			//sprawdzanie czy liczba nie jest za duza na unsigned int int
 			try {
-				unsigned int temp = std::stoi(paraLiczbaWartosc->second);
+				unsigned int temp = std::stoul(paraLiczbaWartosc->second);
+				if (temp > UINT_MAX) { throw "out_of_range"; }
 				dodajArgument(temp); //dodaje liczbe do vektora argumentow paczki
 			}
-			catch (std::out_of_range) { return "Liczby poza zakresem"; }
-			catch (std::invalid_argument) { return "Niepoprawne argumenty"; }
+			catch (std::string s) { return "Liczby_poza_zakresem"; }
+			catch (std::invalid_argument) { return "Niepoprawne_argumenty"; }
 		}
 		else { wiecejLiczb = 0; }
 		//szukaj nastepnej liczby

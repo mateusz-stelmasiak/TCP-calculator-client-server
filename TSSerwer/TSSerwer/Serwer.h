@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "Paczka.h"
 #include <string>
+#include <math.h>
 #include <random>
 
 #pragma comment (lib, "ws2_32.lib") //dodawanie biblioteki winsock
@@ -65,14 +66,14 @@ private:
 
 
 	//FUNKCJE OPERACJI MATEMATYCZNYCH
-	unsigned int obliczDodawanie(std::vector<unsigned int> argumenty, std::string & status);
-	unsigned int obliczLogarytm(std::vector<unsigned int> argumenty, std::string & status);
-	unsigned int obliczOdejmowanie(std::vector<unsigned int> argumenty, std::string & status);
-	unsigned int obliczMnozenie(std::vector<unsigned int> argumenty, std::string & status);
-	unsigned int obliczDzielenie(std::vector<unsigned int> argumenty, std::string & status);
-	unsigned int obliczModulo(std::vector<unsigned int> argumenty, std::string & status);
-	unsigned int obliczPotege(std::vector<unsigned int> argumenty, std::string & status);
-	unsigned int obliczPierwiastek(std::vector<unsigned int> argumenty, std::string & status);
+	long long int obliczDodawanie(std::vector<unsigned int> argumenty, std::string & status);
+	long long int obliczLogarytm(std::vector<unsigned int> argumenty, std::string & status);
+	long long int obliczOdejmowanie(std::vector<unsigned int> argumenty, std::string & status);
+	long long int obliczMnozenie(std::vector<unsigned int> argumenty, std::string & status);
+	long long int obliczDzielenie(std::vector<unsigned int> argumenty, std::string & status);
+	long long int obliczModulo(std::vector<unsigned int> argumenty, std::string & status);
+	long long int obliczPotege(std::vector<unsigned int> argumenty, std::string & status);
+	long long int obliczPierwiastek(std::vector<unsigned int> argumenty, std::string & status);
 
 
 
@@ -84,6 +85,7 @@ private:
 	//WYPISYWANIE DO KONSOLI
 	void wypisz(std::string doWypisania);
 	void wypisz(std::string naglowek, std::string cialo);
+	void wyswietlLogo();
 };
 
 

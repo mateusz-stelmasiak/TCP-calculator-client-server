@@ -1,4 +1,11 @@
-﻿  Paczka.cpp
-c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\paczka.cpp(140): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\paczka.cpp(254): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+﻿  Serwer.cpp
+c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(188): warning C4244: "argument": konwersja z "__int64" do "unsigned int", możliwa utrata danych
+c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(228): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(246): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(256): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(267): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(275): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(286): warning C4244: "return": konwersja z "double" do "__int64", możliwa utrata danych
+c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(362): warning C4244: "argument": konwersja z "time_t" do "unsigned int", możliwa utrata danych
+c:\users\user\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(20): warning C4715: "Serwer::startUp”: niewszystkie ścieżki kodu zwracają wartość
   TSSerwer.vcxproj -> C:\Users\user\Documents\GitHub\tsProjekt\TSSerwer\Debug\TSSerwer.exe

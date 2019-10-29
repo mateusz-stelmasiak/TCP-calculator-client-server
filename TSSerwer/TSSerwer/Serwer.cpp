@@ -13,18 +13,8 @@ int Serwer::startUp()
 	// Inicjalizuje winsock wersja 2.2
 	flagaError = WSAStartup(MAKEWORD(2, 2), &wsaData);
 	if (flagaError != 0) { wypisz("Nie mozna zainicjowac biblioteki winsock", "zamykanie serwera"); return 0; }
-	std::cout <<
-R"(
-    ______ ______ _______           ________ _____
-   /  ____| ____ |  __ \ \         / /  ____|  __ \
-  |  (___ | |__  | |__) \ \   /\  / /| |__  | |__) |
-   \___  \| ___| |  _  / \ \ /  \/ / |  __| |  _  /
-    ____) | |____| | \ \  \   /\  /  | |____| | \ \
-   |_____/|_______ |  \_\  \ /  \/   |______| |  \_\
-____________________________________________________
-Wariant 16, Mateusz Stelmasiak, 140783
-		)";
-	std::cout << "\n";
+
+	wyswietlLogo();
 
 	nasluchujKlienta();	
 }
@@ -170,7 +160,7 @@ void Serwer::odpowiedzNaAktualnaPaczke()
 		if (paczkaOdpowiedz.dajIdentyfikator() == this->identyfikator)
 		{
 			//zmienne pomocnicze
-			int wynik=-1; //wynik ustawiony na -1 jako znacznik bledu
+			long long int wynik=-1; //wynik ustawiony na -1 jako znacznik bledu
 			std::string operacja = aktualnaPaczka.dajOperacje();
 			std::string status = "OK"; //przechowuje dane o bledach, OK dla braku bledow
 			std::vector<unsigned int> argumenty= aktualnaPaczka.dajArgumenty();
@@ -178,11 +168,12 @@ void Serwer::odpowiedzNaAktualnaPaczke()
 			//sprawdzanie i wykonywanie operacji zawartej w paczce
 			if (operacja != "NULL") 
 			{
-				if (argumenty.size() > 1) { //kazda operacja musi miec conajmniej 2 argumenty 
+				if (argumenty.size() > 1) //kazda operacja musi miec conajmniej 2 argumenty 
+				{ 
 					//kazda funkcja obliczeniowa zwraca dane o bledach do zmiennej status, przekazywanej przez referencje
 					//i wynik do zmiennej wynik, w przypadku bledu wynik zawsze =-1
 					if (operacja == "Dodawanie") { wynik = obliczDodawanie(argumenty, status); }
-					else if (operacja == "Logarytm") { wynik = obliczDodawanie(argumenty, status); }
+					else if (operacja == "Logarytm") { wynik = obliczLogarytm(argumenty, status); }
 					else if (operacja == "Odejmowanie") { wynik = obliczOdejmowanie(argumenty, status); }
 					else if (operacja == "Dzielenie") { wynik = obliczDzielenie(argumenty, status); }
 					else if (operacja == "Mnozenie") { wynik = obliczMnozenie(argumenty, status); }
@@ -190,19 +181,18 @@ void Serwer::odpowiedzNaAktualnaPaczke()
 					else if (operacja == "Pierwiastek") { wynik = obliczPierwiastek(argumenty, status); }
 					else if (operacja == "Modulo") { wynik = obliczModulo(argumenty, status);}
 					else { status = "Nieznana operajca"; }
-				}
-				else { status = "Za malo argumentow"; }
-			}else { status = "Brak operacji"; }
+				}else { status = "Za_malo_argumentow"; }
+			}else { status = "Brak_operacji"; }
 	
 			//jezeli w odpowiedzi nie poprawil sie blad, wpisuje sie wynik jako argument paczkiOdpowiedzi
-			if (wynik > -1) { paczkaOdpowiedz.nadpiszArgumenty(wynik); }
+			if (status=="OK") { paczkaOdpowiedz.nadpiszArgumenty(wynik); }
 			//w przeciwnym wypadku paczkaOdpowiedzi nie zawiera zadnych argumentow
-			else { paczkaOdpowiedz.zerujArgumenty(); } 
+			else {paczkaOdpowiedz.zerujArgumenty(); } 
 			
 			paczkaOdpowiedz.dodajStatus(status);
 			paczkaOdpowiedz.dajZnacznikCzasu();
 		}
-		else { wyslijPaczkeBledu("Niepoprawny identyfikator"); }
+		else {wyslijPaczkeBledu("Niepoprawny_identyfikator"); }
 
 		//wysylanie odpowiedzi do klienta
 		int rezultatWysylki = 0;
@@ -218,6 +208,8 @@ void Serwer::odpowiedzNaAktualnaPaczke()
 void Serwer::wyslijPaczkeBledu(std::string blad) {
 	Paczka reply = Paczka();
 	reply.dodajStatus(blad);
+	reply.dodajIdentyfikator(identyfikator);
+	reply.dodajOperacje("BLEDNY_PAKIET");
 
 	int rezultatWysylki = 0;
 	rezultatWysylki = send(SocketKlienta, reply.dajPaczke().c_str(), reply.dajPaczke().length(), 0);
@@ -226,77 +218,88 @@ void Serwer::wyslijPaczkeBledu(std::string blad) {
 		closesocket(SocketKlienta);
 		WSACleanup();
 	}
-	else { wypisz("Wyslano paczke!", reply.dajDoWyswietlenia()); }
+	else { wypisz("Wyslano paczke bledu!", reply.dajDoWyswietlenia()); }
 }
 
 //FUNKCJE OBLICZENIOWE
 
-unsigned int Serwer::obliczOdejmowanie(std::vector <unsigned int> argumenty, std::string& status) {
-	int wynik = argumenty[0];
+long long int Serwer::obliczOdejmowanie(std::vector <unsigned int> argumenty, std::string& status) {
+	long long int wynik = argumenty[0];
 	for (int i = 1; i < argumenty.size();i++) {
 		wynik -= argumenty[i];
-		if (wynik < 0) { status = "Mniejsze od zera"; return -1; }
+		if (wynik < 0) { status = "Wynik_mniejszy_od_zera"; return -1; }
 	}
 	return wynik;
 }
 
-unsigned int Serwer::obliczMnozenie(std::vector <unsigned int> argumenty, std::string& status) {
-	int wynik = 1;
+long long int Serwer::obliczMnozenie(std::vector <unsigned int> argumenty, std::string& status) {
+	unsigned int wynik = 1;
 	for (auto i : argumenty) {
-		if (wynik!=0 && i > UINT_MAX/wynik ) { status = "Przepelnienie"; return -1; }
+		if (wynik!=0 && i >= UINT_MAX/wynik ) { status = "Przepelnienie"; return -1; }
 		wynik *= i;
 	}
 	return wynik; 
 }
 
-unsigned int Serwer::obliczDzielenie(std::vector <unsigned int> argumenty, std::string& status) {
-	int wynik = argumenty[0];
+long long int Serwer::obliczDzielenie(std::vector <unsigned int> argumenty, std::string& status) {
+	unsigned int wynik = argumenty[0];
 	for (int i = 1; i < argumenty.size(); i++) {
-		if (argumenty[i] == 0) { status = "Dzielenie przez zero";  return -1; }
+		if (argumenty[i] == 0) { status = "Dzielenie_przez_zero";  return -1; }
 		wynik /= argumenty[i];
 	}
 	return wynik; 
 }
 
-unsigned int Serwer::obliczModulo(std::vector<unsigned int> argumenty, std::string & status)
+long long int Serwer::obliczModulo(std::vector<unsigned int> argumenty, std::string & status)
 {
-	int wynik = argumenty[0];
+	unsigned int wynik = argumenty[0];
 	for (int i = 1; i < argumenty.size(); i++) {
-		if (argumenty[i] == 0) { status = "Dzielenie przez zero";  return -1; }
+		if (argumenty[i] == 0) { status = "Dzielenie_przez_zero";  return -1; }
 		wynik %= argumenty[i];
 	}
 	return wynik;
 }
 
-unsigned int Serwer::obliczPotege(std::vector<unsigned int> argumenty, std::string & status)
+long long int Serwer::obliczPotege(std::vector<unsigned int> argumenty, std::string & status)
 {
-	if (argumenty.size() > 2) { status = "Za duzo argumentow"; return -1; }
-	int wynik = 1;
-	for (int i = 1; i < argumenty[1]; i++) {
-		if (argumenty[0]> UINT_MAX / wynik) { status = "Overflow"; return -1; }
-		wynik *=argumenty[0];
+	long long int wynik = argumenty[0];
+	unsigned int wykladnik = 1;
+	for (int i = 1; i < argumenty.size(); i++) {
+		if (wykladnik == 0) { continue; }
+		if (argumenty[i] >= UINT_MAX / wykladnik) { status = "Przepelnienie_Wykladnika"; return -1; }
+		wykladnik *= argumenty[i];
+	}
+	if (wykladnik == 0) { return 1; } //kazda cyfra do zerowej to 1
+	if (wynik == 0) { return 0; } //zero do kazdej potegi (oprocz 0) to 0
+
+	for (int i = 1; i < wykladnik; i++) {
+		if (argumenty[0] >= UINT_MAX/wynik) { status = "Przepelnienie"; return -1; }
+		wynik *= argumenty[0];
 	}
 	return wynik;
 }
 
-unsigned int Serwer::obliczPierwiastek(std::vector<unsigned int> argumenty, std::string & status)
+long long int Serwer::obliczPierwiastek(std::vector<unsigned int> argumenty, std::string & status)
 {
-	if (argumenty.size() > 2) { status = "Za duzo argumentow"; return -1; }
+	if (argumenty.size() > 2) { status = "Za_duzo_argumentow"; return -1; }
+	if(argumenty[0]==0 ||argumenty[1]==0){ status = "Niepoprawny_pierwiastek"; return -1; }
 	return std::pow(argumenty[1], 1.0 / argumenty[0]);
 }
 
-unsigned int Serwer::obliczDodawanie(std::vector <unsigned int> argumenty,std::string& status) {
-	int wynik = 0;
+long long int Serwer::obliczDodawanie(std::vector <unsigned int> argumenty,std::string& status) {
+	unsigned int wynik = 0;
 	for (auto i : argumenty) {
-		if ((i > UINT_MAX - wynik)) {status = "Przepelnienie"; return -1;}	//zapobieganie overflow
+		if ((i >= UINT_MAX - wynik)) {status = "Przepelnienie"; return -1;}	//zapobieganie overflow
 		wynik += i;
 	}
 	return wynik; 
 }
 
-unsigned int Serwer::obliczLogarytm(std::vector <unsigned int> argumenty, std::string& status) {
-	if (argumenty.size() > 2) { status = "Za duzo argumentow"; return -1;}
-	return (int)(log(argumenty[0])/ log(argumenty[1]));
+long long int Serwer::obliczLogarytm(std::vector <unsigned int> argumenty, std::string& status) {
+	if (argumenty.size() > 2) { status = "Za_duzo_argumentow"; return -1;}
+	if (argumenty[0] == 1 || argumenty[0] == 0) { status = "Niepoprawny_Logarytm"; return -1; }
+	return (unsigned int) (std::log(argumenty[1])/ std::log(argumenty[0]));
+	
 }
 
 //GENERATORY
@@ -352,13 +355,12 @@ std::string Serwer::generujInformacjeOKliencie(SOCKADDR_IN addr)
 	std::string adresIPString = adresIP;
 	std::string portString = std::to_string(ntohs(addr.sin_port));
 
-	return "Adres ip: " + adresIPString + " Port: " +  portString;
+	return "Adres ip: " + adresIPString + "| Port: " +  portString;
 }
 
 unsigned int Serwer::generujLosowyIdentyfikator() {
-	static std::default_random_engine e{};
-	std::uniform_int_distribution<unsigned int> d(0, 100);
-	return d(e);
+	std::srand(std::time(0));
+	return (rand()%100)+1;
 }
 
 
@@ -376,3 +378,17 @@ void Serwer::wypisz(std::string naglowek, std::string cialo)
 	std::cout << "\n";
 }
 
+void Serwer::wyswietlLogo() {
+	std::cout <<
+		R"(
+    ______ ______ _______           ________ _____
+   /  ____| ____ |  __ \ \         / /  ____|  __ \
+  |  (___ | |__  | |__) \ \   /\  / /| |__  | |__) |
+   \___  \| ___| |  _  / \ \ /  \/ / |  __| |  _  /
+    ____) | |____| | \ \  \   /\  /  | |____| | \ \
+   |_____/|_______ |  \_\  \ /  \/   |______| |  \_\
+____________________________________________________
+Wariant 16, Mateusz Stelmasiak, 140783
+		)";
+	std::cout << "\n";
+}

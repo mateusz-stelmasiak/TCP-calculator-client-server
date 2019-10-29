@@ -39,6 +39,7 @@ public:
 	void dodajArgument(unsigned int argument);
 	void dodajZnacznikCzasu(std::string ZC);
 	void dodajStatus(std::string status);
+	void dodajOperacje(std::string operacja);
 	void nadpiszArgumenty(unsigned int argument);
 	void zerujArgumenty();
 
