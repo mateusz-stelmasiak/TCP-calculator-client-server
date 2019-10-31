@@ -98,7 +98,7 @@ void Serwer::nasluchujKlienta()
 
 void Serwer::otrzymujDane()
 {
-	int flagaDanych = 0; //przechowuje dane o stanie otrzymywania danych
+	int flagaDanych = 0; //przechowuje dane o stanie otrzymywania danych od klienta
 
 	//iteruje tak dlugo az klient jest podlaczony
 	do { 
@@ -118,7 +118,9 @@ void Serwer::otrzymujDane()
 
 			if(error=="OK") //jezeli otrzymana paczka nie zawierala bledow
 			{
-				wypisz("Otrzymano Paczke!", aktualnaPaczka.dajDoWyswietlenia());
+
+				wypisz("Otrzymano Paczke!", aktualnaPaczka.dajPaczke());
+				//Sleep(3000);
 				odpowiedzNaAktualnaPaczke();
 			}
 			else //jezeli otrzymana paczka zawierala bledy
@@ -132,12 +134,12 @@ void Serwer::otrzymujDane()
 		{
 			wypisz("Klient rozlaczyl sie", "powrot do nasluchiwania");
 			this->identyfikator = 0; //resetowanie identyfikatora sesji
-			nasluchujKlienta();
+			nasluchujKlienta(); //powrot do nasluchiwania
 		}
 		else { //jezeli wystapil blad socket'a
 			wypisz("Blad socket'a z kodem: " +std::to_string(flagaDanych), "powrot do nasluchiwania");
 			this->identyfikator = 0; //resetowanie identyfikatora sesji
-			nasluchujKlienta();
+			nasluchujKlienta(); //powrot do nasluchiwania
 		}
 	} while (flagaDanych > 0);
 }
@@ -180,17 +182,17 @@ void Serwer::odpowiedzNaAktualnaPaczke()
 					else if (operacja == "Potega") { wynik = obliczPotege(argumenty, status); }
 					else if (operacja == "Pierwiastek") { wynik = obliczPierwiastek(argumenty, status); }
 					else if (operacja == "Modulo") { wynik = obliczModulo(argumenty, status);}
-					else { status = "Nieznana operajca"; }
+					else { status = "Nieznana_operacja"; }
 				}else { status = "Za_malo_argumentow"; }
 			}else { status = "Brak_operacji"; }
 	
 			//jezeli w odpowiedzi nie poprawil sie blad, wpisuje sie wynik jako argument paczkiOdpowiedzi
-			if (status=="OK") { paczkaOdpowiedz.nadpiszArgumenty(wynik); }
+			if (status=="OK"){ paczkaOdpowiedz.nadpiszArgumenty(wynik); }
 			//w przeciwnym wypadku paczkaOdpowiedzi nie zawiera zadnych argumentow
 			else {paczkaOdpowiedz.zerujArgumenty(); } 
 			
 			paczkaOdpowiedz.dodajStatus(status);
-			paczkaOdpowiedz.dajZnacznikCzasu();
+			paczkaOdpowiedz.dodajZnacznikCzasu();
 		}
 		else {wyslijPaczkeBledu("Niepoprawny_identyfikator"); }
 
@@ -202,7 +204,7 @@ void Serwer::odpowiedzNaAktualnaPaczke()
 			closesocket(SocketKlienta);
 			WSACleanup();
 		}
-		else { wypisz("Odeslano Paczke!", paczkaOdpowiedz.dajDoWyswietlenia()); }
+		else { wypisz("Odeslano Paczke!", paczkaOdpowiedz.dajPaczke()); }
 }
 
 void Serwer::wyslijPaczkeBledu(std::string blad) {
@@ -266,7 +268,7 @@ long long int Serwer::obliczPotege(std::vector<unsigned int> argumenty, std::str
 	unsigned int wykladnik = 1;
 	for (int i = 1; i < argumenty.size(); i++) {
 		if (wykladnik == 0) { continue; }
-		if (argumenty[i] >= UINT_MAX / wykladnik) { status = "Przepelnienie_Wykladnika"; return -1; }
+		if (argumenty[i] >= UINT_MAX / wykladnik) { status = "Przepelnienie_wykladnika"; return -1; }
 		wykladnik *= argumenty[i];
 	}
 	if (wykladnik == 0) { return 1; } //kazda cyfra do zerowej to 1
@@ -297,7 +299,7 @@ long long int Serwer::obliczDodawanie(std::vector <unsigned int> argumenty,std::
 
 long long int Serwer::obliczLogarytm(std::vector <unsigned int> argumenty, std::string& status) {
 	if (argumenty.size() > 2) { status = "Za_duzo_argumentow"; return -1;}
-	if (argumenty[0] == 1 || argumenty[0] == 0) { status = "Niepoprawny_Logarytm"; return -1; }
+	if (argumenty[0] == 1 || argumenty[0] == 0 || argumenty[1] == 0) { status = "Niepoprawny_logarytm"; return -1; }
 	return (unsigned int) (std::log(argumenty[1])/ std::log(argumenty[0]));
 	
 }

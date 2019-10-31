@@ -46,7 +46,6 @@ int main()
 	getline(std::cin, ipAdress);
 	system("cls");
 	wyswietlLogo();
-	ipAdress = "192.168.43.72";
 
 	//inicjacja biblioteki
 	ver = MAKEWORD(2, 2);

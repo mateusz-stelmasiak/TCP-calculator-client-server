@@ -187,25 +187,25 @@ std::string Paczka::parsujPaczke(std::string wejscie)
 	if (szukaneWMapie != zParsowanyPakiet.end()) 
 	{
 		if (szukaneWMapie->second != "NULL") { this->identyfikator = (unsigned)std::stoi(szukaneWMapie->second); }
-	}else { return "Brak identyfikatora"; }
+	}else { return "Brak_identyfikatora"; }
 	//Operacja
 	szukaneWMapie = zParsowanyPakiet.find("Operacja");
 	if (szukaneWMapie != zParsowanyPakiet.end())
 	{
 		this->operacja = szukaneWMapie->second;
-	}else { return "Brak operacji";}
+	}else { return "Brak_operacji";}
 	//Status
 	szukaneWMapie = zParsowanyPakiet.find("Status");
 	if (szukaneWMapie != zParsowanyPakiet.end())
 	{
 		this->status = szukaneWMapie->second;
-	}else { return "Brak statusu"; }
+	}else { return "Brak_statusu"; }
 	//Znacznik czasu
 	szukaneWMapie = zParsowanyPakiet.find("ZnacznikCzasu");
 	if (szukaneWMapie != zParsowanyPakiet.end())
 	{
 		this->znacznikCzasu = szukaneWMapie->second;
-	}else { return "Brak znacznika czasu"; }
+	}else { return "Brak_znacznika_czasu"; }
 	//DODAWANIE ARGUMENTOW OPERACJI
 
 	std::string aktualnaLiczba{ "Liczba1" };
@@ -230,7 +230,6 @@ std::string Paczka::parsujPaczke(std::string wejscie)
 		licznik++;
 		aktualnaLiczba = "Liczba" + std::to_string(licznik);
 	}
-
 	return "OK";
 }
 
