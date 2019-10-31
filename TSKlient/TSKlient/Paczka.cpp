@@ -79,7 +79,7 @@ int Paczka::odczytaj(std::string wejscie)
 				break;
 			}
 
-			if (bliczba >= ((UINT_MAX - std::stoul(&bufor, nullptr, 10))/10.0) )
+			if (bliczba > ((UINT_MAX - std::stoul(&bufor, nullptr, 10))/10.0 ))
 			{
 				return 2;
 			}

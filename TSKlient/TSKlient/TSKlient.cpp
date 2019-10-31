@@ -10,23 +10,21 @@
 
 void wyswietlLogo()
 {
-	std::cout << R"( .----------------.  .----------------.  .----------------.  .----------------.  .-----------------. .----------------. 
-| .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |
-| |  ___  ____   | || |   _____      | || |     _____    | || |  _________   | || | ____  _____  | || |  _________   | |
-| | |_  ||_  _|  | || |  |_   _|     | || |    |_   _|   | || | |_   ___  |  | || ||_   \|_   _| | || | |  _   _  |  | |
-| |   | |_/ /    | || |    | |       | || |      | |     | || |   | |_  \_|  | || |  |   \ | |   | || | |_/ | | \_|  | |
-| |   |  __'.    | || |    | |   _   | || |      | |     | || |   |  _|  _   | || |  | |\ \| |   | || |     | |      | |
-| |  _| |  \ \_  | || |   _| |__/ |  | || |     _| |_    | || |  _| |___/ |  | || | _| |_\   |_  | || |    _| |_     | |
-| | |____||____| | || |  |________|  | || |    |_____|   | || | |_________|  | || ||_____|\____| | || |   |_____|    | |
-| |              | || |              | || |              | || |              | || |              | || |              | |
-| '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |
- '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------' )" << std::endl;
+	std::cout << R"(  Wariant 16
+  _   __  ___   _      _   __ _   _  _       ___   _____  _____ ______ 
+ | | / / / _ \ | |    | | / /| | | || |     / _ \ |_   _||  _  || ___ \
+ | |/ / / /_\ \| |    | |/ / | | | || |    / /_\ \  | |  | | | || |_/ /
+ |    \ |  _  || |    |    \ | | | || |    |  _  |  | |  | | | ||    / 
+ | |\  \| | | || |____| |\  \| |_| || |____| | | |  | |  \ \_/ /| |\ \ 
+ \_| \_/\_| |_/\_____/\_| \_/ \___/ \_____/\_| |_/  \_/   \___/ \_| \_| 
+
+                                               Maciej Stefaniak, 140782
+                                                                      )" << std::endl;
 }
 
 int main()
 {
 	
-	std::cout << UINT_MAX << std::endl;
 	wyswietlLogo();
 	Paczka paczka = Paczka();
 	Paczka otrzymana = Paczka();
@@ -41,11 +39,13 @@ int main()
 	int bytesRecived;
 	WSAData data;
 	WORD ver;
+
 	std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
 	std::cout << "Klient-> Podaj IP Serwera: ";
 	getline(std::cin, ipAdress);
 	system("cls");
 	wyswietlLogo();
+
 
 	//inicjacja biblioteki
 	ver = MAKEWORD(2, 2);
@@ -69,17 +69,28 @@ int main()
 	sockaddr_in hint;
 	hint.sin_family = AF_INET;
 	hint.sin_port = htons(port);
-	inet_pton(AF_INET, ipAdress.c_str(), &hint.sin_addr); //konwertuje string na numeryczny adres ip
-
+	
 	//łączenie się z serwerem
-	result = connect(newSocket, (sockaddr*)&hint, sizeof(hint));
-	if (result == SOCKET_ERROR)
+	do
 	{
-		std::cout << "Klient-> Nie mozna polaczyc sie z serwerem! " << std::endl;
-		closesocket(newSocket);
-		WSACleanup();
-		return 3;
-	}
+		std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
+		std::cout << "Klient-> Podaj IP Serwera: ";
+		getline(std::cin, ipAdress);
+		system("cls");
+		wyswietlLogo();
+		inet_pton(AF_INET, ipAdress.c_str(), &hint.sin_addr); //konwertuje string na numeryczny adres ip
+
+		if (connect(newSocket, (sockaddr*)&hint, sizeof(hint)) == SOCKET_ERROR)
+		{
+			std::cout << "Klient-> Nie mozna polaczyc sie z serwerem! " << std::endl;
+		}
+		else
+		{
+			break;
+		}
+	} while (1);
+	 
+
 	std::cout << std::endl << std::endl << std::endl << std::endl << "Palaczono z serwerem" << std::endl;
 	//działanie (wysyłanie i odbieranie)
 	do
@@ -107,8 +118,8 @@ int main()
 		paczka.dodajZnacznikCzasu();
 		userInput = paczka.dajPaczke();
 
-		//std::cout << userInput << std::endl; //testy
-		result = send(newSocket, userInput.c_str(), userInput.size() + 1, 0);
+		//std::cout << "Klient-> Serwer: " << userInput << std::endl; //testy
+		result = send(newSocket, userInput.c_str(), userInput.size(), 0);
 
 		if (result != SOCKET_ERROR)
 		{
@@ -117,7 +128,7 @@ int main()
 			bytesRecived = recv(newSocket, buffer, 4096, 0);
 			if (bytesRecived > 0)
 			{
-				//std::cout << "SERWER-> " << std::string(buffer, 0, bytesRecived) << std::endl; //testy
+				//std::cout << "Serwer-> Klient: " << std::string(buffer, 0, bytesRecived) << std::endl; //testy
 
 				otrzymana = Paczka();
 				otrzymana.parsujPaczke(std::string(buffer, 0, bytesRecived));
