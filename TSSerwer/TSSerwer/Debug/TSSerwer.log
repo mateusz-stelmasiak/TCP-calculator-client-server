@@ -1,14 +1,1 @@
-﻿  pch.cpp
-  Paczka.cpp
-c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\paczka.cpp(140): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\paczka.cpp(254): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-  Serwer.cpp
-c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(236): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(254): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(264): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(275): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
-c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(285): warning C4244: "return": konwersja z "double" do "unsigned int", możliwa utrata danych
-  TSSerwer.cpp
-  Generowanie kodu...
-c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(30): warning C4715: "Serwer::startUp”: niewszystkie ścieżki kodu zwracają wartość
-  TSSerwer.vcxproj -> C:\Users\Maciej\Documents\GitHub\tsProjekt\TSSerwer\Debug\TSSerwer.exe
+﻿  TSSerwer.vcxproj -> C:\Users\Maciej\Documents\GitHub\tsProjekt\TSSerwer\Debug\TSSerwer.exe
