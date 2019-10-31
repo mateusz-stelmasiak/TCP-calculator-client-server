@@ -157,7 +157,7 @@ void Paczka::usunSpacaje(std::string *tekst)
 }
 
 std::string Paczka::parsujPaczke(std::string wejscie) 
-{
+{ 
 	std::map<std::string, std::string> zParsowanyPakiet; //bedzie trzymac informacje wyluskane z string wejscie
 
 	//uzywam regex do podzielenia wejscia na grupy- [1]("klucz")[2](: )[3]("wartosc")[4](;)  

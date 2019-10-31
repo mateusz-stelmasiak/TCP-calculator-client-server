@@ -4,12 +4,30 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #include <ws2tcpip.h>
 #include "Paczka.h"
-
+#include <cmath>
 
 #pragma comment(lib, "ws2_32.lib")
 
+void wyswietlLogo()
+{
+	std::cout << R"( .----------------.  .----------------.  .----------------.  .----------------.  .-----------------. .----------------. 
+| .--------------. || .--------------. || .--------------. || .--------------. || .--------------. || .--------------. |
+| |  ___  ____   | || |   _____      | || |     _____    | || |  _________   | || | ____  _____  | || |  _________   | |
+| | |_  ||_  _|  | || |  |_   _|     | || |    |_   _|   | || | |_   ___  |  | || ||_   \|_   _| | || | |  _   _  |  | |
+| |   | |_/ /    | || |    | |       | || |      | |     | || |   | |_  \_|  | || |  |   \ | |   | || | |_/ | | \_|  | |
+| |   |  __'.    | || |    | |   _   | || |      | |     | || |   |  _|  _   | || |  | |\ \| |   | || |     | |      | |
+| |  _| |  \ \_  | || |   _| |__/ |  | || |     _| |_    | || |  _| |___/ |  | || | _| |_\   |_  | || |    _| |_     | |
+| | |____||____| | || |  |________|  | || |    |_____|   | || | |_________|  | || ||_____|\____| | || |   |_____|    | |
+| |              | || |              | || |              | || |              | || |              | || |              | |
+| '--------------' || '--------------' || '--------------' || '--------------' || '--------------' || '--------------' |
+ '----------------'  '----------------'  '----------------'  '----------------'  '----------------'  '----------------' )" << std::endl;
+}
+
 int main()
 {
+	
+	std::cout << UINT_MAX << std::endl;
+	wyswietlLogo();
 	Paczka paczka = Paczka();
 	Paczka otrzymana = Paczka();
 	char buffer[4096];
@@ -23,15 +41,19 @@ int main()
 	int bytesRecived;
 	WSAData data;
 	WORD ver;
-	std::cout << "Klient-> Daj IP Serwera: " << std::endl;
-	std::cin >> ipAdress;
-	//ipAdress = "192.168.43.72";
+	std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
+	std::cout << "Klient-> Podaj IP Serwera: ";
+	getline(std::cin, ipAdress);
+	system("cls");
+	wyswietlLogo();
+	ipAdress = "192.168.43.72";
+
 	//inicjacja biblioteki
 	ver = MAKEWORD(2, 2);
 	result = WSAStartup(ver, &data);
 	if (result != 0)
 	{
-		std::cout << "Klient-> Nie można uruchomic winsocka!" << std::endl;
+		std::cout << "Klient-> Nie mozna uruchomic winsocka!" << std::endl;
 		return 1;
 	}
 
@@ -40,7 +62,7 @@ int main()
 	newSocket = socket(AF_INET, SOCK_STREAM, 0);
 	if (newSocket == INVALID_SOCKET)
 	{
-		std::cout << "Klient-> Nie można podłączyć się do socketu!" << std::endl;
+		std::cout << "Klient-> Nie mozna podlaczyc sie do socketu!" << std::endl;
 		WSACleanup();
 		return 2;
 	}
@@ -54,27 +76,39 @@ int main()
 	result = connect(newSocket, (sockaddr*)&hint, sizeof(hint));
 	if (result == SOCKET_ERROR)
 	{
-		std::cout << "Klient-> Nie mozna polaczyc się z serwerem! " << std::endl;
+		std::cout << "Klient-> Nie mozna polaczyc sie z serwerem! " << std::endl;
 		closesocket(newSocket);
 		WSACleanup();
 		return 3;
 	}
-
+	std::cout << std::endl << std::endl << std::endl << std::endl << "Palaczono z serwerem" << std::endl;
 	//działanie (wysyłanie i odbieranie)
 	do
 	{
-		std::cout << "-> ";
+		userInput = "";
+		std::cout << "Klient-> ";
 		getline(std::cin, userInput);
+		if (userInput == "")
+		{
+			std::cout << "Klient-> Konczenie sesji" << std::endl;
+			break;
+		}
+		system("cls");
+		wyswietlLogo();
+		std::cout << std::endl << std::endl << std::endl <<"Klient-> Dzialanie: " << userInput << std::endl;
 		result = paczka.odczytaj(userInput);
 		if (result != 0)
 		{
+			if(result == 1)
 			std::cout << "Klient-> Bledne dzialanie, podaj tylko jeden operator!" << std::endl;
+			if (result == 2)
+			std::cout << "Klient-> Za duzy argument!" << std::endl;
 			continue;
 		}
 		paczka.dodajZnacznikCzasu();
 		userInput = paczka.dajPaczke();
 
-		std::cout << userInput << std::endl; //testy
+		//std::cout << userInput << std::endl; //testy
 		result = send(newSocket, userInput.c_str(), userInput.size() + 1, 0);
 
 		if (result != SOCKET_ERROR)
@@ -84,7 +118,7 @@ int main()
 			bytesRecived = recv(newSocket, buffer, 4096, 0);
 			if (bytesRecived > 0)
 			{
-				std::cout << "SERWER-> " << std::string(buffer, 0, bytesRecived) << std::endl; //testy
+				//std::cout << "SERWER-> " << std::string(buffer, 0, bytesRecived) << std::endl; //testy
 
 				otrzymana = Paczka();
 				otrzymana.parsujPaczke(std::string(buffer, 0, bytesRecived));
@@ -102,10 +136,9 @@ int main()
 					continue;
 				}
 				
-				std::cout << otrzymana.dajStatus() << std::endl;
-				if (otrzymana.dajArgumenty().size() < 0.5)
+				if (otrzymana.dajArgumenty().size() == 0)
 				{
-					std::cout << "Serwer Blad-> " << otrzymana.dajStatus() << std::endl;
+					std::cout << "Serwer-> Blad: " << otrzymana.dajStatus() << std::endl;
 				}
 				else
 				{
@@ -117,7 +150,7 @@ int main()
 
 
 
-	} while (userInput.size() > 0);
+	} while (1);
 
 	closesocket(newSocket);
 	WSACleanup();

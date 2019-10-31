@@ -40,7 +40,7 @@ public:
 
 	//! Parsowanie string na paczke 
 	/*! Pobiera dane z paczki w formie string i uzupelnia pola w klasie */
-	unsigned int parsujPaczke(std::string wejscie); 
+	std::string parsujPaczke(std::string wejscie); 
 
 	void zerujPaczke();
 
