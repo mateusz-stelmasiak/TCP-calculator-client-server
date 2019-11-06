@@ -1,0 +1,13 @@
+﻿  Serwer.cpp
+c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(237): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(255): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(265): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(276): warning C4018: "<": niezgodność typu ze znakiem/bez znaku
+c:\users\maciej\documents\github\tsprojekt\tsserwer\tsserwer\serwer.cpp(286): warning C4244: "return": konwersja z "double" do "unsigned int", możliwa utrata danych
+  TSSerwer.cpp
+  Trwa generowanie kodu
+  2 of 1269 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
+  Zakończono generowanie kodu
+  TSSerwer.vcxproj -> C:\Users\Maciej\Documents\GitHub\tsProjekt\TSSerwer\Release\TSSerwer.exe

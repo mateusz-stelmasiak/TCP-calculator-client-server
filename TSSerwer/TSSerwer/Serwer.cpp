@@ -66,6 +66,7 @@ void Serwer::nasluchujKlienta()
 
 	// Przypisuje dane serwera do socketu nasluchujacego
 	flagaError = bind(SocketSluchajacy, result->ai_addr, (int)result->ai_addrlen);
+	std::cout << result->ai_addr << std::endl;
 	if (flagaError == SOCKET_ERROR) {
 		wypisz("Blad funkcji bind", "Numer bledu- " + std::to_string(WSAGetLastError()));
 		freeaddrinfo(result);

@@ -97,42 +97,42 @@ int Paczka::odczytaj(std::string wejscie)
 			op = bufor;
 			if (bufor == '+')
 			{
-				this->operacja = "Dodawanie";
+				this->operacja = "dodaj";
 			}
 
 			if (bufor == '-')
 			{
-				this->operacja = "Odejmowanie";
+				this->operacja = "odejmij";
 			}
 
 			if (bufor == '*')
 			{
-				this->operacja = "Mnozenie";
+				this->operacja = "mnozenie";
 			}
 
 			if (bufor == ':')
 			{
-				this->operacja = "Dzielenie";
+				this->operacja = "dzielenie";
 			}
 
 			if (bufor == 'l')
 			{
-				this->operacja = "Logarytm";
+				this->operacja = "logarytm";
 			}
 
 			if (bufor == '^')
 			{
-				this->operacja = "Potega";
+				this->operacja = "potega";
 			}
 
 			if (bufor == 'p')
 			{
-				this->operacja = "Pierwiastek";
+				this->operacja = "pierwiastek";
 			}
 
 			if (bufor == '%')
 			{
-				this->operacja = "Modulo";
+				this->operacja = "modulo";
 			}
 		}
 		else

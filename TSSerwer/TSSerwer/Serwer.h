@@ -16,7 +16,7 @@
 
 #pragma comment (lib, "ws2_32.lib") //dodawanie biblioteki winsock
 
-#define PORT_NASLUCHUJACY "54000"
+#define PORT_NASLUCHUJACY "77777"
 #define DLUGOSC_BUFFERU 4096 
 
 class Serwer
