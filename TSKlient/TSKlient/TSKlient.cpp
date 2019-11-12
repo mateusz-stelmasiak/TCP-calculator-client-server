@@ -40,11 +40,11 @@ int main()
 	WSAData data;
 	WORD ver;
 
-	std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
+	/*std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
 	std::cout << "Klient-> Podaj IP Serwera: ";
 	getline(std::cin, ipAdress);
 	system("cls");
-	wyswietlLogo();
+	wyswietlLogo();*/
 
 
 	//inicjacja biblioteki
