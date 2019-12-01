@@ -25,9 +25,9 @@ void wyswietlLogo()
 int main()
 {
 	
-	wyswietlLogo();
-	Paczka paczka = Paczka();
-	Paczka otrzymana = Paczka();
+	wyswietlLogo(); // metoda wyświetlkająca logo, używana po wyczyszczeniu ekranu 
+	Paczka paczka = Paczka();	 //
+	Paczka otrzymana = Paczka(); // paczki, otrzymane i wysłane
 	char buffer[4096];
 
 
@@ -40,11 +40,7 @@ int main()
 	WSAData data;
 	WORD ver;
 
-	/*std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
-	std::cout << "Klient-> Podaj IP Serwera: ";
-	getline(std::cin, ipAdress);
-	system("cls");
-	wyswietlLogo();*/
+
 
 
 	//inicjacja biblioteki
@@ -92,22 +88,23 @@ int main()
 	 
 
 	std::cout << std::endl << std::endl << std::endl << std::endl << "Palaczono z serwerem" << std::endl;
-	//działanie (wysyłanie i odbieranie)
+
+	//działanie (wysyłanie i odbieranie), główna pętla programu
 	do
 	{
 		userInput = "";
 		std::cout << "Klient-> ";
 		getline(std::cin, userInput);
-		if (userInput == "")
+		if (userInput == "") //po braku otrzymania polecenia program się wyłącza 
 		{
 			std::cout << "Klient-> Konczenie sesji" << std::endl;
 			break;
 		}
-		system("cls");
-		wyswietlLogo();
+		system("cls");	//
+		wyswietlLogo(); // dla zachowania przejrzystości działania programu ekran jest czyszczony
 		std::cout << std::endl << std::endl << std::endl <<"Klient-> Dzialanie: " << userInput << std::endl;
 		result = paczka.odczytaj(userInput);
-		if (result != 0)
+		if (result != 0) // sprawdzanie błędów wynikających z pomyłki użytkownika przy wpisywaniu
 		{
 			if(result == 1)
 			std::cout << "Klient-> Bledne dzialanie, podaj tylko jeden operator!" << std::endl;
@@ -118,9 +115,8 @@ int main()
 		paczka.dodajZnacznikCzasu();
 		userInput = paczka.dajPaczke();
 
-		//std::cout << "Klient-> Serwer: " << userInput << std::endl; //testy
-		result = send(newSocket, userInput.c_str(), userInput.size(), 0);
 
+		result = send(newSocket, userInput.c_str(), userInput.size(), 0);
 		if (result != SOCKET_ERROR)
 		{
 			ZeroMemory(buffer, 4096);
@@ -128,13 +124,12 @@ int main()
 			bytesRecived = recv(newSocket, buffer, 4096, 0);
 			if (bytesRecived > 0)
 			{
-				//std::cout << "Serwer-> Klient: " << std::string(buffer, 0, bytesRecived) << std::endl; //testy
 
 				otrzymana = Paczka();
 				otrzymana.parsujPaczke(std::string(buffer, 0, bytesRecived));
 				
 
-				
+				/*sprawdzanie czy wiadomośc zawiera informację o wystąpieniu błędu na podstawie tego czy zawiera argumenty*/
 				if (paczka.dajIdentyfikator() == 0)
 				{
 					paczka.dodajIdentyfikator(otrzymana.dajIdentyfikator());
